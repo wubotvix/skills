@@ -165,12 +165,14 @@ def get_hourly(geo, fmt, hours=24):
     params = urllib.parse.urlencode({
         "latitude": geo["lat"], "longitude": geo["lon"],
         "timezone": geo["tz"], "forecast_days": 3,
+        "current": "temperature_2m",
         "hourly": "temperature_2m,apparent_temperature,weather_code,precipitation_probability,precipitation,wind_speed_10m,relative_humidity_2m",
     })
     data = api_get(f"{FORECAST_URL}?{params}")
     h = data["hourly"]
     loc = geo["name"]
-    now_str = datetime.now().strftime("%Y-%m-%dT%H:00")
+    # Use the API's current time (in the requested timezone) to find start index
+    now_str = data["current"]["time"]
     start = 0
     for i, t in enumerate(h["time"]):
         if t >= now_str:
@@ -257,15 +259,21 @@ def main():
             i = args.index(flag)
             if i + 1 < len(args):
                 val = args[i + 1]; args = args[:i] + args[i+2:]; return val
+            else:
+                args = args[:i] + args[i+1:]; return None
         return None
     v = pull_val("--unit")
     if v: unit = v
     if pull("--celsius"): unit = "celsius"
-    if pull("--fahrenheit"): unit = "fahrenheit"
+    elif pull("--fahrenheit"): unit = "fahrenheit"
     v = pull_val("--days")
-    if v: days = int(v)
+    if v:
+        try: days = int(v)
+        except ValueError: raise SystemExit(f"Invalid --days value: {v}")
     v = pull_val("--hours")
-    if v: hours = int(v)
+    if v:
+        try: hours = int(v)
+        except ValueError: raise SystemExit(f"Invalid --hours value: {v}")
     as_json = pull("--json")
     cmd = args[0] if args else "help"
     loc = " ".join(args[1:]) if len(args) > 1 else None
@@ -285,7 +293,17 @@ def main():
             result = get_alerts(geocode(loc), fmt)
         elif cmd == "summary":
             if not loc: raise SystemExit("Error: Specify a location")
-            print(quick_summary(geocode(loc), fmt)); return
+            geo = geocode(loc)
+            if as_json:
+                current = get_current(geo, fmt)
+                forecast = get_forecast(geo, fmt, days=3)
+                clean_current = {k: v for k, v in current.items() if not k.startswith("_") and k != "summary"}
+                clean_days = [{k: v for k, v in d.items() if not k.startswith("_")} for d in forecast["days"]]
+                result = {"location": geo["name"], "current": clean_current, "forecast": clean_days}
+                print(json.dumps(result, indent=2, ensure_ascii=False))
+            else:
+                print(quick_summary(geo, fmt))
+            return
         elif cmd == "coords":
             if len(args) < 3: raise SystemExit("Error: Provide lat lon")
             result = get_current(coords_geo(args[1], args[2]), fmt)

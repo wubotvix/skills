@@ -24,18 +24,19 @@ DEFAULT_COUNT = 10
 # ── HTML helpers ────────────────────────────────────────────
 
 class TextExtractor(HTMLParser):
+    _SKIP_TAGS = frozenset(('script', 'style'))
     def __init__(self):
         super().__init__()
         self._text = []
-        self._skip = False
+        self._skip_depth = 0
     def handle_starttag(self, tag, attrs):
-        if tag in ('script', 'style'):
-            self._skip = True
+        if tag in self._SKIP_TAGS:
+            self._skip_depth += 1
     def handle_endtag(self, tag):
-        if tag in ('script', 'style'):
-            self._skip = False
+        if tag in self._SKIP_TAGS and self._skip_depth > 0:
+            self._skip_depth -= 1
     def handle_data(self, data):
-        if not self._skip:
+        if self._skip_depth == 0:
             t = data.strip()
             if t:
                 self._text.append(t)
@@ -96,8 +97,10 @@ def fetch_rss(feed_url, source_name, n=DEFAULT_COUNT):
             if d is not None and d.text:
                 desc = clean(d.text)
             ce = item.find("content:encoded", ns)
-            if ce is not None and ce.text and len(clean(ce.text)) > len(desc):
-                desc = clean(ce.text)
+            if ce is not None and ce.text:
+                ce_clean = clean(ce.text)
+                if len(ce_clean) > len(desc):
+                    desc = ce_clean
             pd = item.find("pubDate")
             if pd is not None and pd.text:
                 pub_date = pd.text.strip()
@@ -265,12 +268,17 @@ def main():
             i = args.index(flag)
             if i + 1 < len(args):
                 val = args[i+1]; args = args[:i] + args[i+2:]; return val
+            else:
+                args = args[:i] + args[i+1:]; return None
         return None
 
     if pull("--json"): mode = "json"
-    if pull("--detailed"): mode = "detailed"
+    elif pull("--detailed"): mode = "detailed"
     v = pull_val("--count")
-    if v: count = int(v)
+    if v:
+        try: count = int(v)
+        except ValueError:
+            print(f"Invalid --count value: {v}", file=sys.stderr); sys.exit(1)
     v = pull_val("--source")
     if v:
         sources = [s.strip().lower() for s in v.split(",")]
