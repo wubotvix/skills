@@ -1,3 +1,0 @@
-#!/bin/sh
-# AutoClaw Startup News Skill — convenience wrapper
-exec python3 "$(dirname "$0")/startup_news.py" "$@"

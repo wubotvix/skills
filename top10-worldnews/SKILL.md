@@ -2,9 +2,9 @@
 
 **Skill:** Top world news aggregator — fetch & format for LLM
 **Sources:** The Guardian (JSON API), BBC News (RSS), Al Jazeera (RSS), New York Times (RSS), Fox News (RSS)
-**File:** `worldnews.py` (Python 3)
-**Runtime:** Python 3.8+ (stdlib only)
-**Dependencies:** None — zero pip packages, no API keys needed
+**File:** `WorldNews.java`
+**Runtime:** Android (API 21+)
+**Dependencies:** None — Android built-in APIs only (`HttpURLConnection`, `XmlPullParser`, `JSONObject`)
 
 ## What It Does
 
@@ -22,76 +22,55 @@ Fetches top 10 daily world news from 5 major international sources and outputs L
 
 All 5 sources are free, no signup or API key registration needed.
 
-## CLI Usage
+## Android Java Usage
 
-```bash
-# Default: all 5 sources, 10 articles each, brief format
-./worldnews
+```java
+WorldNews news = new WorldNews();
 
-# 5 articles per source
-./worldnews --count 5
+// Fetch all sources, 10 articles each
+news.fetchAll(new WorldNews.Callback() {
+    @Override
+    public void onSuccess(WorldNews.NewsResult result) {
+        Log.d("WorldNews", result.briefSummary);    // LLM-ready
+        Log.d("WorldNews", result.detailedSummary); // with URLs
+        Log.d("WorldNews", result.toJson().toString(2)); // JSON
+    }
+    @Override
+    public void onError(String error) {
+        Log.e("WorldNews", error);
+    }
+});
 
-# Detailed with URLs and descriptions
-./worldnews --detailed
+// Custom: 5 articles from BBC and Guardian
+news.fetchAll(5, new String[]{"bbc", "guardian"}, callback);
 
-# JSON output
-./worldnews --json
+// Single source
+news.fetchSource("aj", 10, callback);
 
-# Single source
-./worldnews --source bbc
-
-# Multiple sources
-./worldnews --source guardian,nyt,fox
-```
-
-## Output Formats
-
-| Format | Flag | Best For |
-|--------|------|----------|
-| Brief (default) | — | LLM summarization input |
-| Detailed | `--detailed` | Human reading, with URLs |
-| JSON | `--json` | Programmatic use |
-
-## Library Usage (Python import)
-
-```python
-from worldnews import fetch_all, fetch_guardian, fetch_bbc, fetch_aljazeera, fetch_nyt, fetch_fox
-from worldnews import fmt_brief, fmt_detailed
-
-# All sources
-results = fetch_all(n=10)
-print(fmt_brief(results))
-
-# Single source
-guardian = fetch_guardian(10)
-nyt = fetch_nyt(5)
-
-# Select sources
-results = fetch_all(n=5, sources=["bbc", "nyt", "fox"])
+// Cleanup
+news.shutdown();
 ```
 
 ## Files
 
 | File | Description |
 |------|-------------|
-| `worldnews.py` | Main skill — fetch, parse, format |
-| `worldnews` | Shell wrapper |
+| `WorldNews.java` | Android Java — async callbacks, built-in APIs only |
 | `SKILL.md` | This documentation |
 
-## Flags
+## API Methods
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--count N` | 10 | Articles per source |
-| `--source X` | all | Source codes: guardian, bbc, aj, nyt, fox |
-| `--detailed` | — | Grouped by source with URLs |
-| `--json` | — | Full JSON output |
-| `-h, --help` | — | Show help |
+| Method | Args | Returns |
+|--------|------|---------|
+| `fetchAll()` | — | `NewsResult` (all sources, 10 each) |
+| `fetchAll(count, sources)` | int, String[] | `NewsResult` (custom) |
+| `fetchSource(code, count)` | String, int | `NewsResult` (single source) |
 
 ## Design
 
 - **Fetch only** — no LLM dependency
-- **LLM-ready output** — brief format designed for direct LLM piping
+- **LLM-ready output** — `briefSummary` designed for direct LLM piping
 - **5 global perspectives** — UK, international, Global South, US mainstream, US conservative
-- **Status on stderr** — progress to stderr, clean data to stdout
+- **Guardian JSON API** — parsed with `JSONObject`, others with `XmlPullParser`
+- **Async** — all network calls on background threads via ExecutorService
 - **Zero config** — works out of the box, no keys needed

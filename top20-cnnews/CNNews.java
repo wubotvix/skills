@@ -1,0 +1,354 @@
+package skills.cnnews;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+/**
+ * AutoClaw Top-20 CN News Skill
+ * Pulls top 10 daily China news from 3 Sina RSS sections.
+ * No external dependencies. Android built-in APIs only.
+ * Content in Chinese.
+ *
+ * Sources (all from rss.sina.com.cn):
+ *   headlines = 新浪头条 (marquee/ddt.xml)
+ *   china     = 国内新闻 (china/china_report.xml)
+ *   society   = 社会新闻 (society/society_report.xml)
+ *
+ * Usage:
+ *   CNNews news = new CNNews();
+ *   news.fetchAll(new CNNews.Callback() { ... });
+ *   news.fetchAll(5, new String[]{"headlines","china"}, new CNNews.Callback() { ... });
+ */
+public class CNNews {
+
+    private static final int TIMEOUT = 15000;
+    private static final String UA = "AutoClaw-CNNews/1.0";
+    private static final int DEFAULT_COUNT = 10;
+
+    private final ExecutorService executor = Executors.newCachedThreadPool();
+
+    // ── Callback ──────────────────────────────────────────────
+
+    public interface Callback {
+        void onSuccess(NewsResult result);
+        void onError(String error);
+    }
+
+    // ── Data Models ───────────────────────────────────────────
+
+    public static class Article {
+        public String source;
+        public String title;
+        public String url;
+        public String description;
+        public String published;
+        public String author;
+        public String error;
+
+        public JSONObject toJson() {
+            try {
+                JSONObject o = new JSONObject();
+                if (error != null) {
+                    o.put("source", source);
+                    o.put("error", error);
+                    return o;
+                }
+                o.put("source", source);
+                o.put("title", title);
+                o.put("url", url);
+                if (description != null) o.put("description", description);
+                if (published != null) o.put("published", published);
+                if (author != null) o.put("author", author);
+                return o;
+            } catch (Exception e) {
+                return new JSONObject();
+            }
+        }
+    }
+
+    public static class NewsResult {
+        public Map<String, List<Article>> results;
+        public String briefSummary;
+        public String detailedSummary;
+
+        public JSONObject toJson() {
+            try {
+                JSONObject o = new JSONObject();
+                for (Map.Entry<String, List<Article>> entry : results.entrySet()) {
+                    JSONArray arr = new JSONArray();
+                    for (Article a : entry.getValue()) arr.put(a.toJson());
+                    o.put(entry.getKey(), arr);
+                }
+                return o;
+            } catch (Exception e) {
+                return new JSONObject();
+            }
+        }
+    }
+
+    // ── Source Config ─────────────────────────────────────────
+
+    private static final Map<String, String> SOURCE_NAMES = new LinkedHashMap<>();
+    static {
+        SOURCE_NAMES.put("headlines", "\u65b0\u6d6a\u5934\u6761");
+        SOURCE_NAMES.put("china", "\u56fd\u5185\u65b0\u95fb");
+        SOURCE_NAMES.put("society", "\u793e\u4f1a\u65b0\u95fb");
+    }
+
+    private static final Map<String, String> SOURCE_FEEDS = new LinkedHashMap<>();
+    static {
+        SOURCE_FEEDS.put("headlines", "https://rss.sina.com.cn/news/marquee/ddt.xml");
+        SOURCE_FEEDS.put("china", "https://rss.sina.com.cn/news/china/china_report.xml");
+        SOURCE_FEEDS.put("society", "https://rss.sina.com.cn/news/society/society_report.xml");
+    }
+
+    // ── HTML Stripping ────────────────────────────────────────
+
+    private static String stripHtml(String s) {
+        if (s == null || s.isEmpty()) return "";
+        return s.replaceAll("<[^>]*>", "").replaceAll("\\s+", " ").trim();
+    }
+
+    private static String clean(String s) {
+        if (s == null || s.isEmpty()) return null;
+        s = stripHtml(s);
+        return s.length() > 400 ? s.substring(0, 400) : s;
+    }
+
+    // ── HTTP ──────────────────────────────────────────────────
+
+    private static String httpGet(String urlStr) throws Exception {
+        URL url = new URL(urlStr);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("User-Agent", UA);
+        conn.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+        conn.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8");
+        conn.setConnectTimeout(TIMEOUT);
+        conn.setReadTimeout(TIMEOUT);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) sb.append(line).append("\n");
+            return sb.toString();
+        } finally {
+            conn.disconnect();
+        }
+    }
+
+    // ── RSS Parser ────────────────────────────────────────────
+
+    private static List<Article> fetchRss(String feedUrl, String sourceName, int n) {
+        List<Article> articles = new ArrayList<>();
+        try {
+            String xml = httpGet(feedUrl);
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(new StringReader(xml));
+
+            boolean inItem = false;
+            String currentTag = "";
+            String title = "", link = "", description = "", pubDate = "", author = "";
+
+            int eventType = parser.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    String tag = parser.getName();
+                    if ("item".equals(tag) || "entry".equals(tag)) {
+                        inItem = true;
+                        title = "";
+                        link = "";
+                        description = "";
+                        pubDate = "";
+                        author = "";
+                    }
+                    if (inItem) {
+                        currentTag = tag;
+                        if ("link".equals(tag)) {
+                            String href = parser.getAttributeValue(null, "href");
+                            if (href != null && !href.isEmpty()) link = href;
+                        }
+                    }
+                } else if (eventType == XmlPullParser.TEXT && inItem) {
+                    String text = parser.getText();
+                    if (text != null) text = text.trim();
+                    if (text != null && !text.isEmpty()) {
+                        switch (currentTag) {
+                            case "title":
+                                title += text;
+                                break;
+                            case "link":
+                                if (link.isEmpty()) link = text;
+                                break;
+                            case "description":
+                                description += text;
+                                break;
+                            case "summary":
+                                description += text;
+                                break;
+                            case "pubDate":
+                                pubDate += text;
+                                break;
+                            case "published":
+                                pubDate += text;
+                                break;
+                            case "updated":
+                                if (pubDate.isEmpty()) pubDate += text;
+                                break;
+                            case "creator":
+                                author += text;
+                                break;
+                            case "author":
+                                author += text;
+                                break;
+                            case "encoded":
+                                String cleaned = clean(text);
+                                if (cleaned != null && cleaned.length() > description.length())
+                                    description = cleaned;
+                                break;
+                        }
+                    }
+                } else if (eventType == XmlPullParser.END_TAG) {
+                    String tag = parser.getName();
+                    if (("item".equals(tag) || "entry".equals(tag)) && inItem) {
+                        inItem = false;
+                        title = title.trim();
+                        if (!title.isEmpty() && articles.size() < n) {
+                            Article a = new Article();
+                            a.source = sourceName;
+                            a.title = title;
+                            a.url = link.trim();
+                            String desc = clean(description);
+                            if (desc != null && !desc.isEmpty())
+                                a.description = desc.length() > 300 ? desc.substring(0, 300) : desc;
+                            if (!pubDate.trim().isEmpty()) a.published = pubDate.trim();
+                            if (!author.trim().isEmpty()) a.author = author.trim();
+                            articles.add(a);
+                        }
+                    }
+                    if (tag.equals(currentTag)) currentTag = "";
+                }
+                eventType = parser.next();
+            }
+        } catch (Exception e) {
+            Article err = new Article();
+            err.source = sourceName;
+            err.error = e.getMessage();
+            articles.add(err);
+        }
+        return articles;
+    }
+
+    // ── Formatters ────────────────────────────────────────────
+
+    private static String fmtBrief(Map<String, List<Article>> allResults) {
+        StringBuilder sb = new StringBuilder();
+        int idx = 1;
+        for (Map.Entry<String, List<Article>> entry : allResults.entrySet()) {
+            for (Article a : entry.getValue()) {
+                if (a.error != null || a.title == null || a.title.isEmpty()) continue;
+                sb.append(idx).append(". [").append(entry.getKey()).append("] ").append(a.title);
+                if (a.description != null) {
+                    String desc = a.description.length() > 150 ? a.description.substring(0, 150) : a.description;
+                    sb.append(" -- ").append(desc);
+                }
+                sb.append("\n");
+                idx++;
+            }
+        }
+        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date());
+        return "\u4e2d\u56fd\u65b0\u95fb (" + now + ") - " + (idx - 1)
+            + " \u7bc7\u6587\u7ae0\uff0c\u6765\u81ea " + allResults.size() + " \u4e2a\u680f\u76ee\n" + sb;
+    }
+
+    private static String fmtDetailed(Map<String, List<Article>> allResults) {
+        StringBuilder sb = new StringBuilder();
+        int total = 0;
+        for (Map.Entry<String, List<Article>> entry : allResults.entrySet()) {
+            List<Article> valid = new ArrayList<>();
+            List<Article> errors = new ArrayList<>();
+            for (Article a : entry.getValue()) {
+                if (a.error != null) errors.add(a);
+                else if (a.title != null && !a.title.isEmpty()) valid.add(a);
+            }
+            sb.append("\n## ").append(entry.getKey()).append(" (").append(valid.size()).append(" \u7bc7)\n");
+            for (Article e : errors) sb.append("  [\u9519\u8bef: ").append(e.error).append("]\n");
+            int i = 1;
+            for (Article a : valid) {
+                sb.append("  ").append(i).append(". **").append(a.title).append("**\n");
+                if (a.url != null && !a.url.isEmpty()) sb.append("     ").append(a.url).append("\n");
+                if (a.description != null) {
+                    String desc = a.description.length() > 250 ? a.description.substring(0, 250) : a.description;
+                    sb.append("     ").append(desc).append("\n");
+                }
+                if (a.published != null) sb.append("     \u53d1\u5e03: ").append(a.published).append("\n");
+                i++;
+                total++;
+            }
+        }
+        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date());
+        return "# \u4e2d\u56fd\u65b0\u95fb - " + now + "\n**" + total
+            + " \u7bc7\u6587\u7ae0\uff0c\u6765\u81ea " + allResults.size() + " \u4e2a\u680f\u76ee**\n" + sb;
+    }
+
+    // ── Public API ────────────────────────────────────────────
+
+    /** Fetch all sections, 10 articles each. */
+    public void fetchAll(Callback callback) {
+        fetchAll(DEFAULT_COUNT, null, callback);
+    }
+
+    /** Fetch selected sections with custom count. Pass null for sources to fetch all. */
+    public void fetchAll(int count, String[] sources, Callback callback) {
+        executor.execute(() -> {
+            try {
+                Map<String, List<Article>> results = new LinkedHashMap<>();
+                String[] targets = sources != null ? sources : SOURCE_NAMES.keySet().toArray(new String[0]);
+
+                for (String key : targets) {
+                    String name = SOURCE_NAMES.get(key);
+                    String feed = SOURCE_FEEDS.get(key);
+                    if (name != null && feed != null) {
+                        results.put(name, fetchRss(feed, name, count));
+                    }
+                }
+
+                NewsResult result = new NewsResult();
+                result.results = results;
+                result.briefSummary = fmtBrief(results);
+                result.detailedSummary = fmtDetailed(results);
+                callback.onSuccess(result);
+            } catch (Exception e) {
+                callback.onError(e.getMessage());
+            }
+        });
+    }
+
+    /** Fetch a single section by code (headlines, china, society). */
+    public void fetchSource(String code, int count, Callback callback) {
+        fetchAll(count, new String[]{code}, callback);
+    }
+
+    /** Shutdown the executor when done. */
+    public void shutdown() {
+        executor.shutdown();
+    }
+}

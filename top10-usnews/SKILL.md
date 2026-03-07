@@ -2,9 +2,9 @@
 
 **Skill:** Top US news aggregator — fetch & format for LLM
 **Sources:** New York Times (RSS), Fox News (RSS), NPR (RSS)
-**File:** `usnews.py` (Python 3)
-**Runtime:** Python 3.8+ (stdlib only)
-**Dependencies:** None — zero pip packages, no API keys needed
+**File:** `USNews.java`
+**Runtime:** Android (API 21+)
+**Dependencies:** None — Android built-in APIs only (`HttpURLConnection`, `XmlPullParser`, `JSONObject`)
 
 ## What It Does
 
@@ -20,76 +20,66 @@ Fetches top 10 daily US news from 3 major American sources and outputs LLM-ready
 
 All 3 sources are free, no signup or API key needed.
 
-## CLI Usage
+## Android Java Usage
 
-```bash
-# Default: all 3 sources, 10 articles each, brief format
-./usnews
+```java
+USNews news = new USNews();
 
-# 5 articles per source
-./usnews --count 5
+// Fetch all sources, 10 articles each
+news.fetchAll(new USNews.Callback() {
+    @Override
+    public void onSuccess(USNews.NewsResult result) {
+        // Brief format — best for LLM input
+        Log.d("USNews", result.briefSummary);
 
-# Detailed with URLs and descriptions
-./usnews --detailed
+        // Detailed format — with URLs
+        Log.d("USNews", result.detailedSummary);
 
-# JSON output
-./usnews --json
+        // JSON for programmatic use
+        Log.d("USNews", result.toJson().toString(2));
 
-# Single source
-./usnews --source nyt
+        // Access individual articles
+        for (Map.Entry<String, List<USNews.Article>> entry : result.results.entrySet()) {
+            for (USNews.Article article : entry.getValue()) {
+                Log.d("USNews", article.title + " - " + article.url);
+            }
+        }
+    }
+    @Override
+    public void onError(String error) {
+        Log.e("USNews", error);
+    }
+});
 
-# Multiple sources
-./usnews --source nyt,fox
-```
+// Custom: 5 articles from NYT and Fox only
+news.fetchAll(5, new String[]{"nyt", "fox"}, callback);
 
-## Output Formats
+// Single source
+news.fetchSource("npr", 10, callback);
 
-| Format | Flag | Best For |
-|--------|------|----------|
-| Brief (default) | — | LLM summarization input |
-| Detailed | `--detailed` | Human reading, with URLs |
-| JSON | `--json` | Programmatic use |
-
-## Library Usage (Python import)
-
-```python
-from usnews import fetch_all, fetch_nyt, fetch_fox, fetch_npr
-from usnews import fmt_brief, fmt_detailed
-
-# All sources
-results = fetch_all(n=10)
-print(fmt_brief(results))
-
-# Single source
-nyt = fetch_nyt(10)
-fox = fetch_fox(5)
-
-# Select sources
-results = fetch_all(n=5, sources=["nyt", "fox"])
+// Cleanup
+news.shutdown();
 ```
 
 ## Files
 
 | File | Description |
 |------|-------------|
-| `usnews.py` | Main skill — fetch, parse, format |
-| `usnews` | Shell wrapper |
+| `USNews.java` | Android Java — async callbacks, built-in APIs only |
 | `SKILL.md` | This documentation |
 
-## Flags
+## API Methods
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--count N` | 10 | Articles per source |
-| `--source X` | all | Source codes: nyt, fox, npr |
-| `--detailed` | — | Grouped by source with URLs |
-| `--json` | — | Full JSON output |
-| `-h, --help` | — | Show help |
+| Method | Args | Returns |
+|--------|------|---------|
+| `fetchAll()` | — | `NewsResult` (all sources, 10 each) |
+| `fetchAll(count, sources)` | int, String[] | `NewsResult` (custom) |
+| `fetchSource(code, count)` | String, int | `NewsResult` (single source) |
 
 ## Design
 
 - **Fetch only** — no LLM dependency
-- **LLM-ready output** — brief format designed for direct LLM piping
+- **LLM-ready output** — `briefSummary` designed for direct LLM piping
 - **3 US perspectives** — center-left, conservative, public radio
-- **Status on stderr** — progress to stderr, clean data to stdout
+- **Async** — all network calls run on background threads via ExecutorService
 - **Zero config** — works out of the box, no keys needed

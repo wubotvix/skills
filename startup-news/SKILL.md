@@ -2,9 +2,9 @@
 
 **Skill:** Startup & tech news aggregator — fetch & format for LLM
 **Provider:** TechMeme, TechCrunch, Hacker News, VentureBeat, Crunchbase News
-**File:** `startup_news.py` (Python 3)
-**Runtime:** Python 3.8+ (stdlib only: `urllib`, `json`, `xml`, `html.parser`)
-**Dependencies:** None — zero pip packages, instant startup
+**File:** `StartupNews.java`
+**Runtime:** Android (API 21+)
+**Dependencies:** None — Android built-in APIs only (`HttpURLConnection`, `XmlPullParser`, `JSONObject`)
 
 ## What It Does
 
@@ -14,108 +14,81 @@ Fetches headlines from 5 startup/tech news sources and outputs them in LLM-ready
 
 | Code | Source | Method | What |
 |------|--------|--------|------|
-| `tm` | TechMeme | HTML scrape | Top tech headlines, curated |
-| `tc` | TechCrunch | HTML scrape + RSS fallback | Startup/funding news |
+| `tm` | TechMeme | HTML scrape (regex) | Top tech headlines, curated |
+| `tc` | TechCrunch | HTML scrape (regex) + RSS fallback | Startup/funding news |
 | `hn` | Hacker News | Algolia JSON API | Top stories by points |
 | `vb` | VentureBeat | RSS feed | Enterprise tech, AI |
 | `cb` | Crunchbase News | RSS feed | Funding, deals, layoffs |
 
-## CLI Usage
+## Android Java Usage
 
-```bash
-# Default: all sources, brief format (best for LLM input)
-./startup-news
+```java
+StartupNews news = new StartupNews();
 
-# Fewer articles per source
-./startup-news --count 5
+// Fetch all sources, 10 articles each
+news.fetchAll(new StartupNews.Callback() {
+    @Override
+    public void onSuccess(StartupNews.NewsResult result) {
+        // Brief format — best for LLM input
+        Log.d("Startup", result.briefSummary);
 
-# Detailed format with URLs and descriptions
-./startup-news --detailed --count 3
+        // Detailed format — with URLs and descriptions
+        Log.d("Startup", result.detailedSummary);
 
-# JSON output for programmatic use
-./startup-news --json
+        // JSON for programmatic use
+        Log.d("Startup", result.toJson().toString(2));
 
-# Single source
-./startup-news --source hn
+        // Access individual articles
+        for (Map.Entry<String, List<StartupNews.Article>> entry : result.results.entrySet()) {
+            for (StartupNews.Article article : entry.getValue()) {
+                Log.d("Startup", article.title);
+                if (article.points > 0) {
+                    Log.d("Startup", "  " + article.points + " pts, " + article.comments + " comments");
+                }
+            }
+        }
+    }
+    @Override
+    public void onError(String error) {
+        Log.e("Startup", error);
+    }
+});
 
-# Multiple sources
-./startup-news --source hn,cb,tm
+// Custom: 5 articles from HN and Crunchbase
+news.fetchAll(5, new String[]{"hn", "cb"}, callback);
 
-# Pipe to an LLM for summarization
-./startup-news --count 5 | llm "summarize today's startup news"
-```
+// Single source
+news.fetchSource("hn", 10, callback);
 
-## Output Formats
-
-| Format | Flag | Best For |
-|--------|------|----------|
-| Brief (default) | — | LLM summarization input |
-| Detailed | `--detailed` | Human reading, with URLs |
-| JSON | `--json` | Programmatic use, further processing |
-
-### Brief (default) — LLM-ready
-```
-Startup & Tech News (2026-03-05 04:35) - 15 articles
-1. [TechMeme] OpenAI announces GPT-5...
-2. [TechCrunch] Stripe raises $6.5B...
-3. [Hacker News] Show HN: I built...
-```
-
-### Detailed — human-readable
-```
-## TechMeme (3 articles)
-  1. **OpenAI announces GPT-5**
-     https://example.com/...
-  2. ...
-```
-
-## Library Usage (Python import)
-
-```python
-from startup_news import fetch_all, fetch_hackernews, fetch_rss, fmt_brief, fmt_detailed
-
-# All sources, 5 articles each
-results = fetch_all(n=5)
-print(fmt_brief(results))
-
-# Single source
-hn = fetch_hackernews(10)
-
-# RSS source
-vb = fetch_rss("https://venturebeat.com/feed/", "VentureBeat", 5)
-
-# Custom source selection
-results = fetch_all(n=5, sources=["hn", "cb"])
+// Cleanup
+news.shutdown();
 ```
 
 ## Files
 
 | File | Description |
 |------|-------------|
-| `startup_news.py` | Main skill — fetch, parse, format |
-| `startup-news` | Shell wrapper |
+| `StartupNews.java` | Android Java — async callbacks, built-in APIs only |
 | `SKILL.md` | This documentation |
 
-## Flags
+## API Methods
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--count N` | 10 | Articles per source (1-50) |
-| `--source X` | all | Source codes: hn, tm, tc, vb, cb (comma-separated) |
-| `--detailed` | — | Grouped by source with URLs |
-| `--json` | — | Full JSON output |
-| `-h`, `--help` | — | Show help |
+| Method | Args | Returns |
+|--------|------|---------|
+| `fetchAll()` | — | `NewsResult` (all sources, 10 each) |
+| `fetchAll(count, sources)` | int, String[] | `NewsResult` (custom) |
+| `fetchSource(code, count)` | String, int | `NewsResult` (single source) |
 
 ## Design
 
 - **Fetch only** — no LLM dependency, no API keys needed
-- **LLM-ready output** — brief format is designed for direct LLM piping
-- **Graceful degradation** — TechCrunch falls back to RSS if scrape fails
+- **LLM-ready output** — `briefSummary` designed for direct LLM piping
+- **Graceful degradation** — TechCrunch falls back to RSS if HTML scrape fails
 - **Deduplication** — removes duplicate headlines per source
-- **Status on stderr** — progress messages go to stderr, clean data to stdout
+- **Async** — all network calls on background threads via ExecutorService
+- **HTML scraping** — uses regex patterns instead of full HTML parser (simple enough for the target markup)
 
 ## Requirements
 
-- Python 3.8+ (stdlib only)
+- Android API 21+ (uses `HttpURLConnection`, `org.json`, `XmlPullParser`)
 - Internet access
-- Works on Linux, macOS, Windows, Android/Termux

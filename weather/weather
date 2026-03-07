@@ -1,3 +1,0 @@
-#!/bin/sh
-# AutoClaw Weather Skill — convenience wrapper
-exec python3 "$(dirname "$0")/weather.py" "$@"
