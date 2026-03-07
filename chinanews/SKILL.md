@@ -1,4 +1,4 @@
-# Top-20 CN News Skill — SKILL.md
+# China News Skill — SKILL.md
 
 **Skill:** China news aggregator — fetch & format for LLM
 **Source:** Sina News (rss.sina.com.cn) — 3 sections

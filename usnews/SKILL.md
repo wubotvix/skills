@@ -1,4 +1,4 @@
-# Top-10 US News Skill — SKILL.md
+# US News Skill — SKILL.md
 
 **Skill:** Top US news aggregator — fetch & format for LLM
 **Sources:** New York Times (RSS), Fox News (RSS), NPR (RSS)

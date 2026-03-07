@@ -1,4 +1,4 @@
-# CN Tech News Skill — SKILL.md
+# China Tech News Skill — SKILL.md
 
 **Skill:** Chinese tech news aggregator — fetch & format for LLM
 **Sources:** 36氪 (RSS), 钛媒体 (RSS), IT之家 (RSS), 少数派 (RSS), 新浪科技 (RSS)

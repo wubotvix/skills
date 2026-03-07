@@ -1,4 +1,4 @@
-# Top-10 World News Skill — SKILL.md
+# World News Skill — SKILL.md
 
 **Skill:** Top world news aggregator — fetch & format for LLM
 **Sources:** The Guardian (JSON API), BBC News (RSS), Al Jazeera (RSS), New York Times (RSS), Fox News (RSS)
