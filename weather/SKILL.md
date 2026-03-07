@@ -2,9 +2,9 @@
 
 **Skill:** Weather lookup and forecasting
 **Provider:** Open-Meteo (api.open-meteo.com) — free, no API key required
-**File:** `Weather.java`
-**Runtime:** Android (API 21+)
-**Dependencies:** None — Android built-in APIs only (`HttpURLConnection`, `JSONObject`)
+**File:** `weather.js`
+**Runtime:** Node.js (18+)
+**Dependencies:** None — Node.js built-in APIs only (`https`)
 
 ## What It Does
 
@@ -17,58 +17,42 @@
 - **Units** — Fahrenheit (default) or Celsius
 - **JSON output** — via `toJson()` on all result objects
 
-## Android Java Usage
+## Node.js Usage
 
-```java
-Weather weather = new Weather();
+```js
+const Weather = require('./weather');
+const weather = new Weather();
 
-// Current weather (async with callback)
-weather.getCurrent("San Francisco", new Weather.Callback<Weather.CurrentResult>() {
-    @Override
-    public void onSuccess(Weather.CurrentResult result) {
-        Log.d("Weather", result.summary);        // formatted text
-        Log.d("Weather", result.temperature);     // "52.9F"
-        Log.d("Weather", result.toJson().toString()); // JSON
-    }
-    @Override
-    public void onError(String error) {
-        Log.e("Weather", error);
-    }
-});
+// Current weather (async/await)
+const current = await weather.getCurrent('San Francisco');
+console.log(current.summary);        // formatted text
+console.log(current.temperature);     // "52.9F"
+console.log(current.toJson());        // plain object
 
 // Forecast with options
-weather.getForecast("Tokyo", 5, "celsius", new Weather.Callback<Weather.ForecastResult>() {
-    @Override
-    public void onSuccess(Weather.ForecastResult result) {
-        for (Weather.ForecastDay day : result.days) {
-            Log.d("Weather", day.day + ": " + day.high + "/" + day.low);
-        }
-    }
-    @Override
-    public void onError(String error) { }
-});
+const forecast = await weather.getForecast('Tokyo', 5, 'celsius');
+for (const day of forecast.days) {
+  console.log(`${day.day}: ${day.high}/${day.low}`);
+}
 
 // Hourly
-weather.getHourly("London", 12, "fahrenheit", callback);
+const hourly = await weather.getHourly('London', 12, 'fahrenheit');
 
 // Alerts
-weather.getAlerts("Seattle", callback);
+const alerts = await weather.getAlerts('Seattle');
 
 // Summary (current + 3-day)
-weather.getSummary("Paris", callback);
+const summary = await weather.getSummary('Paris');
 
 // By coordinates
-weather.getByCoords(37.7749, -122.4194, callback);
-
-// Cleanup when done
-weather.shutdown();
+const coords = await weather.getByCoords(37.7749, -122.4194);
 ```
 
 ## Files
 
 | File | Description |
 |------|-------------|
-| `Weather.java` | Android Java — async callbacks, built-in APIs only |
+| `weather.js` | Node.js — async/await, built-in APIs only |
 | `SKILL.md` | This documentation |
 
 ## API Methods
@@ -82,7 +66,7 @@ weather.shutdown();
 | `getSummary` | location, [unit] | `SummaryResult` |
 | `getByCoords` | lat, lon, [unit] | `CurrentResult` |
 
-All methods are async — results delivered via `Callback<T>`.
+All methods are async — returns Promises.
 
 ## Alert Thresholds
 
@@ -99,6 +83,6 @@ All methods are async — results delivered via `Callback<T>`.
 
 ## Requirements
 
-- Android API 21+ (uses `HttpURLConnection`, `org.json`, `java.net`)
+- Node.js 18+ (uses `https` module)
 - Internet access
 - No API key needed

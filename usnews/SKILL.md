@@ -2,9 +2,9 @@
 
 **Skill:** Top US news aggregator — fetch & format for LLM
 **Sources:** New York Times (RSS), Fox News (RSS), NPR (RSS)
-**File:** `USNews.java`
-**Runtime:** Android (API 21+)
-**Dependencies:** None — Android built-in APIs only (`HttpURLConnection`, `XmlPullParser`, `JSONObject`)
+**File:** `usnews.js`
+**Runtime:** Node.js (18+)
+**Dependencies:** None — Node.js built-in APIs only (`https`, `http`)
 
 ## What It Does
 
@@ -20,52 +20,43 @@ Fetches top 10 daily US news from 3 major American sources and outputs LLM-ready
 
 All 3 sources are free, no signup or API key needed.
 
-## Android Java Usage
+## Node.js Usage
 
-```java
-USNews news = new USNews();
+```js
+const USNews = require('./usnews');
+const news = new USNews();
 
 // Fetch all sources, 10 articles each
-news.fetchAll(new USNews.Callback() {
-    @Override
-    public void onSuccess(USNews.NewsResult result) {
-        // Brief format — best for LLM input
-        Log.d("USNews", result.briefSummary);
+const result = await news.fetchAll();
 
-        // Detailed format — with URLs
-        Log.d("USNews", result.detailedSummary);
+// Brief format — best for LLM input
+console.log(result.briefSummary);
 
-        // JSON for programmatic use
-        Log.d("USNews", result.toJson().toString(2));
+// Detailed format — with URLs
+console.log(result.detailedSummary);
 
-        // Access individual articles
-        for (Map.Entry<String, List<USNews.Article>> entry : result.results.entrySet()) {
-            for (USNews.Article article : entry.getValue()) {
-                Log.d("USNews", article.title + " - " + article.url);
-            }
-        }
-    }
-    @Override
-    public void onError(String error) {
-        Log.e("USNews", error);
-    }
-});
+// JSON for programmatic use
+console.log(JSON.stringify(result.toJson(), null, 2));
+
+// Access individual articles
+for (const [source, articles] of Object.entries(result.results)) {
+  for (const article of articles) {
+    console.log(`${article.title} - ${article.url}`);
+  }
+}
 
 // Custom: 5 articles from NYT and Fox only
-news.fetchAll(5, new String[]{"nyt", "fox"}, callback);
+const custom = await news.fetchAll(5, ['nyt', 'fox']);
 
 // Single source
-news.fetchSource("npr", 10, callback);
-
-// Cleanup
-news.shutdown();
+const npr = await news.fetchSource('npr', 10);
 ```
 
 ## Files
 
 | File | Description |
 |------|-------------|
-| `USNews.java` | Android Java — async callbacks, built-in APIs only |
+| `usnews.js` | Node.js — async/await, built-in APIs only |
 | `SKILL.md` | This documentation |
 
 ## API Methods
@@ -73,13 +64,13 @@ news.shutdown();
 | Method | Args | Returns |
 |--------|------|---------|
 | `fetchAll()` | — | `NewsResult` (all sources, 10 each) |
-| `fetchAll(count, sources)` | int, String[] | `NewsResult` (custom) |
-| `fetchSource(code, count)` | String, int | `NewsResult` (single source) |
+| `fetchAll(count, sources)` | number, string[] | `NewsResult` (custom) |
+| `fetchSource(code, count)` | string, number | `NewsResult` (single source) |
 
 ## Design
 
 - **Fetch only** — no LLM dependency
 - **LLM-ready output** — `briefSummary` designed for direct LLM piping
 - **3 US perspectives** — center-left, conservative, public radio
-- **Async** — all network calls run on background threads via ExecutorService
+- **Async** — all network calls use native `https`/`http` with Promises
 - **Zero config** — works out of the box, no keys needed

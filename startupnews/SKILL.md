@@ -2,9 +2,9 @@
 
 **Skill:** Startup & tech news aggregator — fetch & format for LLM
 **Provider:** TechMeme, TechCrunch, Hacker News, VentureBeat, Crunchbase News
-**File:** `StartupNews.java`
-**Runtime:** Android (API 21+)
-**Dependencies:** None — Android built-in APIs only (`HttpURLConnection`, `XmlPullParser`, `JSONObject`)
+**File:** `startupnews.js`
+**Runtime:** Node.js (18+)
+**Dependencies:** None — Node.js built-in APIs only (`https`, `http`)
 
 ## What It Does
 
@@ -20,55 +20,46 @@ Fetches headlines from 5 startup/tech news sources and outputs them in LLM-ready
 | `vb` | VentureBeat | RSS feed | Enterprise tech, AI |
 | `cb` | Crunchbase News | RSS feed | Funding, deals, layoffs |
 
-## Android Java Usage
+## Node.js Usage
 
-```java
-StartupNews news = new StartupNews();
+```js
+const StartupNews = require('./startupnews');
+const news = new StartupNews();
 
 // Fetch all sources, 10 articles each
-news.fetchAll(new StartupNews.Callback() {
-    @Override
-    public void onSuccess(StartupNews.NewsResult result) {
-        // Brief format — best for LLM input
-        Log.d("Startup", result.briefSummary);
+const result = await news.fetchAll();
 
-        // Detailed format — with URLs and descriptions
-        Log.d("Startup", result.detailedSummary);
+// Brief format — best for LLM input
+console.log(result.briefSummary);
 
-        // JSON for programmatic use
-        Log.d("Startup", result.toJson().toString(2));
+// Detailed format — with URLs and descriptions
+console.log(result.detailedSummary);
 
-        // Access individual articles
-        for (Map.Entry<String, List<StartupNews.Article>> entry : result.results.entrySet()) {
-            for (StartupNews.Article article : entry.getValue()) {
-                Log.d("Startup", article.title);
-                if (article.points > 0) {
-                    Log.d("Startup", "  " + article.points + " pts, " + article.comments + " comments");
-                }
-            }
-        }
+// JSON for programmatic use
+console.log(JSON.stringify(result.toJson(), null, 2));
+
+// Access individual articles
+for (const [source, articles] of Object.entries(result.results)) {
+  for (const article of articles) {
+    console.log(article.title);
+    if (article.points > 0) {
+      console.log(`  ${article.points} pts, ${article.comments} comments`);
     }
-    @Override
-    public void onError(String error) {
-        Log.e("Startup", error);
-    }
-});
+  }
+}
 
 // Custom: 5 articles from HN and Crunchbase
-news.fetchAll(5, new String[]{"hn", "cb"}, callback);
+const custom = await news.fetchAll(5, ['hn', 'cb']);
 
 // Single source
-news.fetchSource("hn", 10, callback);
-
-// Cleanup
-news.shutdown();
+const hn = await news.fetchSource('hn', 10);
 ```
 
 ## Files
 
 | File | Description |
 |------|-------------|
-| `StartupNews.java` | Android Java — async callbacks, built-in APIs only |
+| `startupnews.js` | Node.js — async/await, built-in APIs only |
 | `SKILL.md` | This documentation |
 
 ## API Methods
@@ -76,8 +67,8 @@ news.shutdown();
 | Method | Args | Returns |
 |--------|------|---------|
 | `fetchAll()` | — | `NewsResult` (all sources, 10 each) |
-| `fetchAll(count, sources)` | int, String[] | `NewsResult` (custom) |
-| `fetchSource(code, count)` | String, int | `NewsResult` (single source) |
+| `fetchAll(count, sources)` | number, string[] | `NewsResult` (custom) |
+| `fetchSource(code, count)` | string, number | `NewsResult` (single source) |
 
 ## Design
 
@@ -85,10 +76,10 @@ news.shutdown();
 - **LLM-ready output** — `briefSummary` designed for direct LLM piping
 - **Graceful degradation** — TechCrunch falls back to RSS if HTML scrape fails
 - **Deduplication** — removes duplicate headlines per source
-- **Async** — all network calls on background threads via ExecutorService
+- **Async** — all network calls use native `https`/`http` with Promises
 - **HTML scraping** — uses regex patterns instead of full HTML parser (simple enough for the target markup)
 
 ## Requirements
 
-- Android API 21+ (uses `HttpURLConnection`, `org.json`, `XmlPullParser`)
+- Node.js 18+ (uses `https`, `http` modules)
 - Internet access

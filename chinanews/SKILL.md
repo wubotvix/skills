@@ -2,9 +2,9 @@
 
 **Skill:** China news aggregator — fetch & format for LLM
 **Source:** Sina News (rss.sina.com.cn) — 3 sections
-**File:** `CNNews.java`
-**Runtime:** Android (API 21+)
-**Dependencies:** None — Android built-in APIs only (`HttpURLConnection`, `XmlPullParser`, `JSONObject`)
+**File:** `cnnews.js`
+**Runtime:** Node.js (18+)
+**Dependencies:** None — Node.js built-in APIs only (`https`, `http`)
 **Language:** Chinese (中文)
 
 ## What It Does
@@ -21,52 +21,43 @@ Fetches top 10 daily China news from 3 Sina News RSS sections. Content in Chines
 
 All sections are free, no signup or API key needed.
 
-## Android Java Usage
+## Node.js Usage
 
-```java
-CNNews news = new CNNews();
+```js
+const CNNews = require('./cnnews');
+const news = new CNNews();
 
 // Fetch all sections, 10 articles each
-news.fetchAll(new CNNews.Callback() {
-    @Override
-    public void onSuccess(CNNews.NewsResult result) {
-        // Brief format — best for LLM input
-        Log.d("CNNews", result.briefSummary);
+const result = await news.fetchAll();
 
-        // Detailed format — with URLs
-        Log.d("CNNews", result.detailedSummary);
+// Brief format — best for LLM input
+console.log(result.briefSummary);
 
-        // JSON for programmatic use
-        Log.d("CNNews", result.toJson().toString(2));
+// Detailed format — with URLs
+console.log(result.detailedSummary);
 
-        // Access individual articles
-        for (Map.Entry<String, List<CNNews.Article>> entry : result.results.entrySet()) {
-            for (CNNews.Article article : entry.getValue()) {
-                Log.d("CNNews", article.title + " - " + article.url);
-            }
-        }
-    }
-    @Override
-    public void onError(String error) {
-        Log.e("CNNews", error);
-    }
-});
+// JSON for programmatic use
+console.log(JSON.stringify(result.toJson(), null, 2));
+
+// Access individual articles
+for (const [source, articles] of Object.entries(result.results)) {
+  for (const article of articles) {
+    console.log(`${article.title} - ${article.url}`);
+  }
+}
 
 // Custom: 5 articles from headlines and china only
-news.fetchAll(5, new String[]{"headlines", "china"}, callback);
+const custom = await news.fetchAll(5, ['headlines', 'china']);
 
 // Single section
-news.fetchSource("society", 10, callback);
-
-// Cleanup
-news.shutdown();
+const society = await news.fetchSource('society', 10);
 ```
 
 ## Files
 
 | File | Description |
 |------|-------------|
-| `CNNews.java` | Android Java — async callbacks, built-in APIs only |
+| `cnnews.js` | Node.js — async/await, built-in APIs only |
 | `SKILL.md` | This documentation |
 
 ## API Methods
@@ -74,8 +65,8 @@ news.shutdown();
 | Method | Args | Returns |
 |--------|------|---------|
 | `fetchAll()` | — | `NewsResult` (all sections, 10 each) |
-| `fetchAll(count, sources)` | int, String[] | `NewsResult` (custom) |
-| `fetchSource(code, count)` | String, int | `NewsResult` (single section) |
+| `fetchAll(count, sources)` | number, string[] | `NewsResult` (custom) |
+| `fetchSource(code, count)` | string, number | `NewsResult` (single section) |
 
 ## Design
 
@@ -83,11 +74,11 @@ news.shutdown();
 - **Chinese content** — all output in Chinese, including headers and labels (篇文章, 栏目, 错误, 发布)
 - **LLM-ready output** — `briefSummary` designed for direct LLM piping
 - **Single provider, 3 perspectives** — headlines, domestic, social from Sina News
-- **Async** — all network calls on background threads via ExecutorService
+- **Async** — all network calls use native `https`/`http` with Promises
 - **Higher timeout** — 15s to accommodate Chinese server response times
 - **Zero config** — works out of the box, no keys needed
 
 ## Requirements
 
-- Android API 21+ (uses `HttpURLConnection`, `org.json`, `XmlPullParser`)
+- Node.js 18+ (uses `https`, `http` modules)
 - Internet access
