@@ -18,7 +18,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const DATA_DIR = path.join(__dirname, 'data');
+const AGENT_DIR = path.join(__dirname, '..', '..', 'autoclaw', 'agent-id');
+const DATA_DIR = path.join(AGENT_DIR, 'data', 'ela-study-planner');
 const MASTERY_THRESHOLD = 0.8;
 
 // ── Skill Catalog (Cross-Skill Diagnostic) ───────────────
@@ -127,13 +128,23 @@ function ensureDataDir() {
 }
 
 function profilePath(studentId) {
-  return path.join(DATA_DIR, `${studentId}.json`);
+  const safe = String(studentId).replace(/[^a-zA-Z0-9_-]/g, '_');
+  return path.join(DATA_DIR, `${safe}.json`);
 }
 
 function loadProfile(studentId) {
   const fp = profilePath(studentId);
   if (fs.existsSync(fp)) {
-    return JSON.parse(fs.readFileSync(fp, 'utf8'));
+    let profile;
+    try {
+      profile = JSON.parse(fs.readFileSync(fp, 'utf8'));
+    } catch (e) {
+      const backup = fp + '.corrupt.' + Date.now();
+      fs.renameSync(fp, backup);
+      return { studentId, grade: null, goal: null, timeBudget: 30, createdAt: new Date().toISOString(), assessments: [], skills: {}, books: [] };
+    }
+    if (!Array.isArray(profile.books)) profile.books = [];
+    return profile;
   }
   return {
     studentId,
@@ -157,8 +168,10 @@ function saveProfile(profile) {
 function calcMastery(assessments) {
   if (assessments.length === 0) return 0;
   const recent = assessments.slice(-5);
-  const total = recent.reduce((sum, a) => sum + a.score / a.total, 0);
-  return Math.round((total / recent.length) * 100) / 100;
+  const total = recent.reduce((sum, a) => a.total > 0 ? sum + a.score / a.total : sum, 0);
+  const validCount = recent.filter(a => a.total > 0).length;
+  if (validCount === 0) return 0;
+  return Math.round((total / validCount) * 100) / 100;
 }
 
 function masteryLabel(ratio) {
@@ -195,6 +208,7 @@ class StudyPlanner {
   }
 
   async setGrade(studentId, grade) {
+    if (!SKILLS[grade]) throw new Error(`Unknown grade: ${grade}. Valid: ${Object.keys(SKILLS).join(', ')}`);
     const profile = loadProfile(studentId);
     profile.grade = grade;
     saveProfile(profile);
@@ -202,16 +216,15 @@ class StudyPlanner {
   }
 
   async setGoal(studentId, goal) {
+    if (!TIME_ALLOCATION[goal]) throw new Error(`Unknown goal: ${goal}. Valid: ${Object.keys(TIME_ALLOCATION).join(', ')}`);
     const profile = loadProfile(studentId);
-    if (!TIME_ALLOCATION[goal]) {
-      return { studentId, goal: null, summary: `Unknown goal: ${goal}. Valid: ${Object.keys(TIME_ALLOCATION).join(', ')}` };
-    }
     profile.goal = goal;
     saveProfile(profile);
     return { studentId, goal, summary: `Goal set to ${goal} for ${studentId}` };
   }
 
   async setTimeBudget(studentId, minutes) {
+    if (typeof minutes !== 'number' || minutes <= 0) throw new Error('minutes must be a positive number');
     const profile = loadProfile(studentId);
     profile.timeBudget = minutes;
     saveProfile(profile);
@@ -219,6 +232,11 @@ class StudyPlanner {
   }
 
   async recordAssessment(studentId, grade, category, skill, score, total, notes = '') {
+    if (!SKILLS[grade]) throw new Error(`Unknown grade: ${grade}. Valid: ${Object.keys(SKILLS).join(', ')}`);
+    if (!SKILLS[grade][category]) throw new Error(`Unknown category '${category}' for ${grade}. Valid: ${Object.keys(SKILLS[grade]).join(', ')}`);
+    if (!SKILLS[grade][category].includes(skill)) throw new Error(`Unknown skill '${skill}' in ${grade}/${category}. Valid: ${SKILLS[grade][category].join(', ')}`);
+    if (typeof total !== 'number' || total <= 0) throw new Error('total must be a positive number');
+    if (typeof score !== 'number' || score < 0 || score > total) throw new Error(`score must be a number between 0 and ${total}`);
     const profile = loadProfile(studentId);
     if (!profile.grade) profile.grade = grade;
 
@@ -347,11 +365,12 @@ class StudyPlanner {
     const goal = profile.goal || 'stay-strong';
     const budget = profile.timeBudget || 30;
     const alloc = TIME_ALLOCATION[goal] || TIME_ALLOCATION['stay-strong'];
-    const halfBudget = Math.round(budget / 2);
+    const half1 = Math.floor(budget / 2);
+    const half2 = budget - half1;
 
     let summary = `**WEEKLY ELA PLAN — ${studentId}**\n`;
     summary += `Grade: ${grade} | Goal: ${goal} | ${budget} min/day\n\n`;
-    summary += `Day    Skill 1 (${halfBudget} min)          Skill 2 (${halfBudget} min)\n`;
+    summary += `Day    Skill 1 (${half1} min)          Skill 2 (${half2} min)\n`;
     summary += `─────────────────────────────────────────────────\n`;
 
     for (const [day, [s1, s2]] of Object.entries(WEEKDAY_PLANS)) {
@@ -366,7 +385,9 @@ class StudyPlanner {
       summary += `  ${AREA_LABELS[area] || area}: ${pct}%\n`;
     }
 
-    return { studentId, grade, goal, budget, plan: WEEKDAY_PLANS, allocation: alloc, summary: summary.trim() };
+    const planCopy = {};
+    for (const [day, areas] of Object.entries(WEEKDAY_PLANS)) planCopy[day] = [...areas];
+    return { studentId, grade, goal, budget, plan: planCopy, allocation: { ...alloc }, summary: summary.trim() };
   }
 
   async addBook(studentId, title, pages = 0) {
@@ -426,7 +447,7 @@ class StudyPlanner {
   async listStudents() {
     ensureDataDir();
     const files = fs.readdirSync(DATA_DIR).filter(f => f.endsWith('.json'));
-    const students = files.map(f => f.replace('.json', ''));
+    const students = files.map(f => f.replace(/\.json$/, ''));
     return {
       count: students.length,
       students,
@@ -441,14 +462,17 @@ class StudyPlanner {
     }
 
     let totalSkills = 0;
+    const skillsCopy = {};
     let summary = `**${grade} Skill Catalog (All Areas):**\n`;
     for (const [area, skills] of Object.entries(gradeSkills)) {
       totalSkills += skills.length;
+      skillsCopy[area] = [...skills];
       summary += `  ${AREA_LABELS[area] || area}: ${skills.join(', ')}\n`;
     }
-    summary += `Total: ${totalSkills} skills across 7 areas`;
+    const areaCount = Object.keys(gradeSkills).length;
+    summary += `Total: ${totalSkills} skills across ${areaCount} areas`;
 
-    return { grade, skills: gradeSkills, totalSkills, summary };
+    return { grade, skills: skillsCopy, totalSkills, summary };
   }
 }
 

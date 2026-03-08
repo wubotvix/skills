@@ -71,13 +71,13 @@ function windDir(deg) {
 }
 
 function dayName(dateStr) {
-  const d = new Date(dateStr + 'T00:00:00');
-  return isNaN(d.getTime()) ? '?' : DAY_NAMES[d.getDay()];
+  const d = new Date(dateStr + 'T00:00:00Z');
+  return isNaN(d.getTime()) ? '?' : DAY_NAMES[d.getUTCDay()];
 }
 
-function fmtTemp(c, imperial) { return imperial ? c2f(c) + 'F' : c + 'C'; }
-function fmtWind(kmh, imperial) { return imperial ? kmh2mph(kmh) + ' mph' : kmh + ' km/h'; }
-function fmtPrecip(mm, imperial) { return imperial ? mm2in(mm) + '"' : mm + ' mm'; }
+function fmtTemp(c, imperial) { if (c == null) return 'N/A'; return imperial ? c2f(c) + 'F' : c + 'C'; }
+function fmtWind(kmh, imperial) { if (kmh == null) return 'N/A'; return imperial ? kmh2mph(kmh) + ' mph' : kmh + ' km/h'; }
+function fmtPrecip(mm, imperial) { if (mm == null) return 'N/A'; return imperial ? mm2in(mm) + '"' : mm + ' mm'; }
 
 // ── HTTP ──────────────────────────────────────────────────
 
@@ -101,6 +101,7 @@ function httpGet(url, redirects = 0) {
       let data = '';
       res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => resolve(data));
+      res.on('error', reject);
     });
     req.on('error', reject);
     req.on('timeout', () => { req.destroy(); reject(new Error('Request timed out')); });
@@ -109,9 +110,14 @@ function httpGet(url, redirects = 0) {
 
 // ── Geocoding ─────────────────────────────────────────────
 
+function safeJsonParse(text) {
+  try { return JSON.parse(text); }
+  catch (e) { throw new Error(`Invalid JSON response: ${e.message}`); }
+}
+
 async function geocode(location) {
   const params = `name=${encodeURIComponent(location)}&count=3&language=en&format=json`;
-  const data = JSON.parse(await httpGet(`${GEOCODE_URL}?${params}`));
+  const data = safeJsonParse(await httpGet(`${GEOCODE_URL}?${params}`));
   const results = data.results;
   if (!results || results.length === 0) throw new Error(`Location not found: '${location}'`);
   const r = results[0];
@@ -131,7 +137,7 @@ async function fetchCurrent(geo, imperial) {
   const params = `latitude=${geo.lat}&longitude=${geo.lon}&timezone=${encodeURIComponent(geo.tz)}`
     + '&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m,'
     + 'wind_gusts_10m,relative_humidity_2m,pressure_msl,cloud_cover,precipitation,uv_index,is_day';
-  const data = JSON.parse(await httpGet(`${FORECAST_URL}?${params}`));
+  const data = safeJsonParse(await httpGet(`${FORECAST_URL}?${params}`));
   const c = data.current;
   const code = c.weather_code;
 
@@ -177,7 +183,7 @@ async function fetchForecast(geo, imperial, days) {
     + `&timezone=${encodeURIComponent(geo.tz)}&forecast_days=${days}`
     + '&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_sum,'
     + 'precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,sunrise,sunset,uv_index_max';
-  const data = JSON.parse(await httpGet(`${FORECAST_URL}?${params}`));
+  const data = safeJsonParse(await httpGet(`${FORECAST_URL}?${params}`));
   const d = data.daily;
 
   const times = d.time;
@@ -244,7 +250,7 @@ async function fetchHourly(geo, imperial, hours) {
     + '&current=temperature_2m'
     + '&hourly=temperature_2m,apparent_temperature,weather_code,precipitation_probability,'
     + 'precipitation,wind_speed_10m,relative_humidity_2m';
-  const data = JSON.parse(await httpGet(`${FORECAST_URL}?${params}`));
+  const data = safeJsonParse(await httpGet(`${FORECAST_URL}?${params}`));
   const h = data.hourly;
   const nowStr = data.current.time;
 
@@ -254,10 +260,11 @@ async function fetchHourly(geo, imperial, hours) {
   const probArr = h.precipitation_probability;
   const windArr = h.wind_speed_10m;
 
-  let start = 0;
+  let start = -1;
   for (let i = 0; i < timesArr.length; i++) {
     if (timesArr[i] >= nowStr) { start = i; break; }
   }
+  if (start === -1) start = timesArr.length;
 
   const entries = [];
   let sb = `**${geo.name}** - Next ${hours}h Forecast\n\n`;

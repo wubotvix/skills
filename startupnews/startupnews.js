@@ -84,6 +84,7 @@ function httpGet(url, redirects = 0) {
       let data = '';
       res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => resolve(data));
+      res.on('error', reject);
     });
     req.on('error', reject);
     req.on('timeout', () => { req.destroy(); reject(new Error('Request timed out')); });
@@ -245,7 +246,7 @@ function fmtDetailed(allResults) {
       if (a.description) {
         sb += `     ${a.description.length > 200 ? a.description.substring(0, 200) : a.description}\n`;
       }
-      if (a.points > 0) sb += `     [${a.points} pts, ${a.comments} comments]\n`;
+      if (a.points != null && a.points > 0) sb += `     [${a.points} pts, ${a.comments || 0} comments]\n`;
       i++; total++;
     }
   }

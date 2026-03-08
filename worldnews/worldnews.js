@@ -87,6 +87,7 @@ function httpGet(url, redirects = 0) {
       let data = '';
       res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => resolve(data));
+      res.on('error', reject);
     });
     req.on('error', reject);
     req.on('timeout', () => { req.destroy(); reject(new Error('Request timed out')); });
@@ -139,11 +140,14 @@ function parseRss(xml, sourceName, n) {
 
 async function fetchGuardian(n) {
   try {
+    const apiKey = process.env.GUARDIAN_API_KEY || 'test';
     const params = `?section=world&order-by=newest&page-size=${n}`
       + '&show-fields=trailText,headline,byline,thumbnail'
-      + '&api-key=test';
+      + `&api-key=${apiKey}`;
     const json = await httpGet('https://content.guardianapis.com/search' + params);
-    const data = JSON.parse(json);
+    let data;
+    try { data = JSON.parse(json); }
+    catch (e) { throw new Error(`Invalid JSON from Guardian API: ${e.message}`); }
     const results = data.response.results;
 
     return results.slice(0, n).map(item => {

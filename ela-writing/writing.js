@@ -15,7 +15,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const DATA_DIR = path.join(__dirname, 'data');
+const AGENT_DIR = path.join(__dirname, '..', '..', 'autoclaw', 'agent-id');
+const DATA_DIR = path.join(AGENT_DIR, 'data', 'ela-writing');
 const MASTERY_THRESHOLD = 0.8;
 
 // ── Skill Catalog ────────────────────────────────────────
@@ -79,13 +80,20 @@ function ensureDataDir() {
 }
 
 function profilePath(studentId) {
-  return path.join(DATA_DIR, `${studentId}.json`);
+  const safe = String(studentId).replace(/[^a-zA-Z0-9_-]/g, '_');
+  return path.join(DATA_DIR, `${safe}.json`);
 }
 
 function loadProfile(studentId) {
   const fp = profilePath(studentId);
   if (fs.existsSync(fp)) {
-    return JSON.parse(fs.readFileSync(fp, 'utf8'));
+    try {
+      return JSON.parse(fs.readFileSync(fp, 'utf8'));
+    } catch (e) {
+      const backup = fp + '.corrupt.' + Date.now();
+      fs.renameSync(fp, backup);
+      return { studentId, grade: null, createdAt: new Date().toISOString(), assessments: [], skills: {} };
+    }
   }
   return {
     studentId,
@@ -106,8 +114,10 @@ function saveProfile(profile) {
 function calcMastery(assessments) {
   if (assessments.length === 0) return 0;
   const recent = assessments.slice(-5);
-  const total = recent.reduce((sum, a) => sum + a.score / a.total, 0);
-  return Math.round((total / recent.length) * 100) / 100;
+  const total = recent.reduce((sum, a) => a.total > 0 ? sum + a.score / a.total : sum, 0);
+  const validCount = recent.filter(a => a.total > 0).length;
+  if (validCount === 0) return 0;
+  return Math.round((total / validCount) * 100) / 100;
 }
 
 function masteryLabel(ratio) {
@@ -133,6 +143,7 @@ class Writing {
   }
 
   async setGrade(studentId, grade) {
+    if (!SKILLS[grade]) throw new Error(`Unknown grade: ${grade}. Valid: ${Object.keys(SKILLS).join(', ')}`);
     const profile = loadProfile(studentId);
     profile.grade = grade;
     saveProfile(profile);
@@ -140,6 +151,11 @@ class Writing {
   }
 
   async recordAssessment(studentId, grade, category, skill, score, total, notes = '') {
+    if (!SKILLS[grade]) throw new Error(`Unknown grade: ${grade}. Valid: ${Object.keys(SKILLS).join(', ')}`);
+    if (!SKILLS[grade][category]) throw new Error(`Unknown category '${category}' for ${grade}. Valid: ${Object.keys(SKILLS[grade]).join(', ')}`);
+    if (!SKILLS[grade][category].includes(skill)) throw new Error(`Unknown skill '${skill}' in ${grade}/${category}. Valid: ${SKILLS[grade][category].join(', ')}`);
+    if (typeof total !== 'number' || total <= 0) throw new Error('total must be a positive number');
+    if (typeof score !== 'number' || score < 0 || score > total) throw new Error(`score must be a number between 0 and ${total}`);
     const profile = loadProfile(studentId);
     if (!profile.grade) profile.grade = grade;
 
@@ -263,7 +279,7 @@ class Writing {
   async listStudents() {
     ensureDataDir();
     const files = fs.readdirSync(DATA_DIR).filter(f => f.endsWith('.json'));
-    const students = files.map(f => f.replace('.json', ''));
+    const students = files.map(f => f.replace(/\.json$/, ''));
     return {
       count: students.length,
       students,
@@ -278,14 +294,16 @@ class Writing {
     }
 
     let totalSkills = 0;
+    const skillsCopy = {};
     let summary = `**${grade} Skill Catalog:**\n`;
     for (const [category, skills] of Object.entries(gradeSkills)) {
       totalSkills += skills.length;
+      skillsCopy[category] = [...skills];
       summary += `  ${category}: ${skills.join(', ')}\n`;
     }
     summary += `Total: ${totalSkills} skills`;
 
-    return { grade, skills: gradeSkills, totalSkills, summary };
+    return { grade, skills: skillsCopy, totalSkills, summary };
   }
 }
 
