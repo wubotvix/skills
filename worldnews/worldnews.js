@@ -1,6 +1,6 @@
 /**
- * AutoClaw Top-10 World News Skill — fetch & format for LLM
- * Pulls top 10 daily world news from 5 major international sources.
+ * AutoClaw Top-20 World News Skill — fetch & format for LLM
+ * Pulls top 20 daily world news from 5 major international sources.
  * No external dependencies. Node.js built-in APIs only.
  *
  * Sources:
@@ -22,7 +22,7 @@ const http = require('http');
 
 const TIMEOUT = 12000;
 const UA = 'AutoClaw-WorldNews/1.0';
-const DEFAULT_COUNT = 10;
+const DEFAULT_COUNT = 20;
 
 const SOURCE_NAMES = {
   guardian: 'The Guardian',
@@ -42,8 +42,8 @@ const RSS_FEEDS = {
 // ── HTML Stripping ────────────────────────────────────────
 
 function decodeEntities(s) {
-  return s.replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
-    .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(Number(dec)))
+  return s.replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)))
     .replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 }
@@ -74,13 +74,16 @@ function httpGet(url, redirects = 0) {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         res.resume();
         if (redirects >= 5) return reject(new Error('Too many redirects'));
-        httpGet(res.headers.location, redirects + 1).then(resolve, reject);
+        const loc = res.headers.location;
+        const next = loc.startsWith('http') ? loc : new URL(loc, url).href;
+        httpGet(next, redirects + 1).then(resolve, reject);
         return;
       }
       if (res.statusCode >= 400) {
         res.resume();
         return reject(new Error(`HTTP ${res.statusCode}`));
       }
+      res.setEncoding('utf8');
       let data = '';
       res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => resolve(data));
@@ -207,7 +210,7 @@ function fmtDetailed(allResults) {
 // ── Public API ────────────────────────────────────────────
 
 class WorldNews {
-  /** Fetch all sources, 10 articles each. */
+  /** Fetch all sources, 20 articles each. */
   async fetchAll(count = DEFAULT_COUNT, sources = null) {
     const results = {};
     const targets = sources || Object.keys(SOURCE_NAMES);

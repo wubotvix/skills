@@ -26,7 +26,7 @@ const http = require('http');
 
 const TIMEOUT = 12000;
 const UA = 'AutoClaw-StartupNews/1.0';
-const MAX_ARTICLES = 10;
+const MAX_ARTICLES = 20;
 
 const SOURCE_NAMES = {
   tm: 'TechMeme',
@@ -39,8 +39,8 @@ const SOURCE_NAMES = {
 // ── HTML Stripping ────────────────────────────────────────
 
 function decodeEntities(s) {
-  return s.replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
-    .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(Number(dec)))
+  return s.replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)))
     .replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 }
@@ -71,13 +71,16 @@ function httpGet(url, redirects = 0) {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         res.resume();
         if (redirects >= 5) return reject(new Error('Too many redirects'));
-        httpGet(res.headers.location, redirects + 1).then(resolve, reject);
+        const loc = res.headers.location;
+        const next = loc.startsWith('http') ? loc : new URL(loc, url).href;
+        httpGet(next, redirects + 1).then(resolve, reject);
         return;
       }
       if (res.statusCode >= 400) {
         res.resume();
         return reject(new Error(`HTTP ${res.statusCode}`));
       }
+      res.setEncoding('utf8');
       let data = '';
       res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => resolve(data));
@@ -253,7 +256,7 @@ function fmtDetailed(allResults) {
 // ── Public API ────────────────────────────────────────────
 
 class StartupNews {
-  /** Fetch all sources, 10 articles each. */
+  /** Fetch all sources, 20 articles each. */
   async fetchAll(count = MAX_ARTICLES, sources = null) {
     const results = {};
     const targets = sources || Object.keys(SOURCE_NAMES);

@@ -26,7 +26,7 @@ Fetches headlines from 5 startup/tech news sources and outputs them in LLM-ready
 const StartupNews = require('./startupnews');
 const news = new StartupNews();
 
-// Fetch all sources, 10 articles each
+// Fetch all sources, 20 articles each
 const result = await news.fetchAll();
 
 // Brief format — best for LLM input
@@ -52,7 +52,7 @@ for (const [source, articles] of Object.entries(result.results)) {
 const custom = await news.fetchAll(5, ['hn', 'cb']);
 
 // Single source
-const hn = await news.fetchSource('hn', 10);
+const hn = await news.fetchSource('hn', 20);
 ```
 
 ## Files
@@ -66,7 +66,7 @@ const hn = await news.fetchSource('hn', 10);
 
 | Method | Args | Returns |
 |--------|------|---------|
-| `fetchAll()` | — | `NewsResult` (all sources, 10 each) |
+| `fetchAll()` | — | `NewsResult` (all sources, 20 each) |
 | `fetchAll(count, sources)` | number, string[] | `NewsResult` (custom) |
 | `fetchSource(code, count)` | string, number | `NewsResult` (single source) |
 

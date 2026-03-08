@@ -88,13 +88,16 @@ function httpGet(url, redirects = 0) {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         res.resume();
         if (redirects >= 5) return reject(new Error('Too many redirects'));
-        httpGet(res.headers.location, redirects + 1).then(resolve, reject);
+        const loc = res.headers.location;
+        const next = loc.startsWith('http') ? loc : new URL(loc, url).href;
+        httpGet(next, redirects + 1).then(resolve, reject);
         return;
       }
       if (res.statusCode >= 400) {
         res.resume();
         return reject(new Error(`HTTP ${res.statusCode}`));
       }
+      res.setEncoding('utf8');
       let data = '';
       res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => resolve(data));

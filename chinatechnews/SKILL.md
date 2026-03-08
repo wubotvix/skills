@@ -1,7 +1,7 @@
 # China Tech News Skill — SKILL.md
 
 **Skill:** Chinese tech news aggregator — fetch & format for LLM
-**Sources:** 36氪 (RSS), 钛媒体 (RSS), IT之家 (RSS), 少数派 (RSS), 新浪科技 (RSS)
+**Sources:** 36氪 (RSS), 钛媒体 (RSS), IT之家 (RSS), 少数派 (RSS)
 **File:** `cntechnews.js`
 **Runtime:** Node.js (18+)
 **Dependencies:** None — Node.js built-in APIs only (`https`, `http`)
@@ -9,7 +9,7 @@
 
 ## What It Does
 
-Fetches top 20 Chinese tech news from 5 major Chinese tech media sources via RSS. Content in Chinese. **Does not call any LLM** — the calling agent handles summarization.
+Fetches top 20 Chinese tech news from 4 major Chinese tech media sources via RSS. Content in Chinese. **Does not call any LLM** — the calling agent handles summarization.
 
 ### Sources
 
@@ -19,9 +19,8 @@ Fetches top 20 Chinese tech news from 5 major Chinese tech media sources via RSS
 | `tmt` | 钛媒体 | tmtpost.com/rss.xml | Tech business, deep analysis |
 | `ithome` | IT之家 | ithome.com/rss/ | Consumer tech, gadgets, software |
 | `sspai` | 少数派 | sspai.com/feed | Apps, productivity, digital lifestyle |
-| `sina` | 新浪科技 | rss.sina.com.cn (tech) | Mainstream tech news, industry |
 
-All 5 sources are free, no signup or API key needed.
+All 4 sources are free, no signup or API key needed.
 
 ## Node.js Usage
 

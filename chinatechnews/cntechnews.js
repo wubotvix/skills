@@ -1,6 +1,6 @@
 /**
  * AutoClaw CN Tech News Skill
- * Aggregates top 20 Chinese tech news from 5 sources via RSS.
+ * Aggregates top 20 Chinese tech news from 4 sources via RSS.
  * No external dependencies. Node.js built-in APIs only.
  * Content in Chinese.
  *
@@ -9,7 +9,6 @@
  *   tmt     = 钛媒体 (tmtpost.com/rss.xml)
  *   ithome  = IT之家 (ithome.com/rss/)
  *   sspai   = 少数派 (sspai.com/feed)
- *   sina    = 新浪科技 (rss.sina.com.cn)
  *
  * Usage:
  *   const CNTechNews = require('./CNTechNews');
@@ -30,7 +29,6 @@ const SOURCE_NAMES = {
   tmt: '\u949b\u5a92\u4f53',
   ithome: 'IT\u4e4b\u5bb6',
   sspai: '\u5c11\u6570\u6d3e',
-  sina: '\u65b0\u6d6a\u79d1\u6280',
 };
 
 const RSS_FEEDS = {
@@ -38,14 +36,13 @@ const RSS_FEEDS = {
   tmt: 'https://www.tmtpost.com/rss.xml',
   ithome: 'https://www.ithome.com/rss/',
   sspai: 'https://sspai.com/feed',
-  sina: 'https://rss.sina.com.cn/tech/rollnews.xml',
 };
 
 // ── HTML Stripping ────────────────────────────────────────
 
 function decodeEntities(s) {
-  return s.replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
-    .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(Number(dec)))
+  return s.replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)))
     .replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 }
@@ -77,13 +74,16 @@ function httpGet(url, redirects = 0) {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         res.resume();
         if (redirects >= 5) return reject(new Error('Too many redirects'));
-        httpGet(res.headers.location, redirects + 1).then(resolve, reject);
+        const loc = res.headers.location;
+        const next = loc.startsWith('http') ? loc : new URL(loc, url).href;
+        httpGet(next, redirects + 1).then(resolve, reject);
         return;
       }
       if (res.statusCode >= 400) {
         res.resume();
         return reject(new Error(`HTTP ${res.statusCode}`));
       }
+      res.setEncoding('utf8');
       let data = '';
       res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => resolve(data));
@@ -212,7 +212,7 @@ class CNTechNews {
     };
   }
 
-  /** Fetch a single source by code (36kr, tmt, ithome, sspai, sina). */
+  /** Fetch a single source by code (36kr, tmt, ithome, sspai). */
   async fetchSource(code, count = DEFAULT_COUNT) {
     return this.fetchAll(count, [code]);
   }

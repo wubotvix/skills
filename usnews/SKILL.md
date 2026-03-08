@@ -8,7 +8,7 @@
 
 ## What It Does
 
-Fetches top 10 daily US news from 3 major American sources and outputs LLM-ready text. **Does not call any LLM** — the calling agent handles summarization.
+Fetches top 20 daily US news from 3 major American sources and outputs LLM-ready text. **Does not call any LLM** — the calling agent handles summarization.
 
 ### Sources
 
@@ -26,7 +26,7 @@ All 3 sources are free, no signup or API key needed.
 const USNews = require('./usnews');
 const news = new USNews();
 
-// Fetch all sources, 10 articles each
+// Fetch all sources, 20 articles each
 const result = await news.fetchAll();
 
 // Brief format — best for LLM input
@@ -49,7 +49,7 @@ for (const [source, articles] of Object.entries(result.results)) {
 const custom = await news.fetchAll(5, ['nyt', 'fox']);
 
 // Single source
-const npr = await news.fetchSource('npr', 10);
+const npr = await news.fetchSource('npr', 20);
 ```
 
 ## Files
@@ -63,7 +63,7 @@ const npr = await news.fetchSource('npr', 10);
 
 | Method | Args | Returns |
 |--------|------|---------|
-| `fetchAll()` | — | `NewsResult` (all sources, 10 each) |
+| `fetchAll()` | — | `NewsResult` (all sources, 20 each) |
 | `fetchAll(count, sources)` | number, string[] | `NewsResult` (custom) |
 | `fetchSource(code, count)` | string, number | `NewsResult` (single source) |
 

@@ -8,7 +8,7 @@
 
 ## What It Does
 
-Fetches top 10 daily world news from 5 major international sources and outputs LLM-ready text. **Does not call any LLM** — the calling agent handles summarization.
+Fetches top 20 daily world news from 5 major international sources and outputs LLM-ready text. **Does not call any LLM** — the calling agent handles summarization.
 
 ### Sources
 
@@ -28,7 +28,7 @@ All 5 sources are free, no signup or API key registration needed.
 const WorldNews = require('./worldnews');
 const news = new WorldNews();
 
-// Fetch all sources, 10 articles each
+// Fetch all sources, 20 articles each
 const result = await news.fetchAll();
 console.log(result.briefSummary);    // LLM-ready
 console.log(result.detailedSummary); // with URLs
@@ -38,7 +38,7 @@ console.log(JSON.stringify(result.toJson(), null, 2)); // JSON
 const custom = await news.fetchAll(5, ['bbc', 'guardian']);
 
 // Single source
-const aj = await news.fetchSource('aj', 10);
+const aj = await news.fetchSource('aj', 20);
 ```
 
 ## Files
@@ -52,7 +52,7 @@ const aj = await news.fetchSource('aj', 10);
 
 | Method | Args | Returns |
 |--------|------|---------|
-| `fetchAll()` | — | `NewsResult` (all sources, 10 each) |
+| `fetchAll()` | — | `NewsResult` (all sources, 20 each) |
 | `fetchAll(count, sources)` | number, string[] | `NewsResult` (custom) |
 | `fetchSource(code, count)` | string, number | `NewsResult` (single source) |
 
