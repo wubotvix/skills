@@ -1,66 +1,31 @@
-# World News Skill — SKILL.md
+# World News Skill
 
-**Skill:** Top world news aggregator — fetch & format for LLM
-**Sources:** The Guardian (JSON API), BBC News (RSS), Al Jazeera (RSS), New York Times (RSS), Fox News (RSS)
-**File:** `worldnews.js`
-**Runtime:** Node.js (18+)
-**Dependencies:** None — Node.js built-in APIs only (`https`, `http`)
+Fetches top world news from Guardian, BBC, Al Jazeera, NYT, Fox via RSS/JSON. No LLM calls, no API keys, no deps.
 
-## What It Does
+## CLI (no LLM needed)
 
-Fetches top 20 daily world news from 5 major international sources and outputs LLM-ready text. **Does not call any LLM** — the calling agent handles summarization.
-
-### Sources
-
-| Code | Source | Method | Coverage |
-|------|--------|--------|----------|
-| `guardian` | The Guardian | JSON API (`api-key=test`) | UK/global perspective |
-| `bbc` | BBC News World | RSS feed | International, balanced |
-| `aj` | Al Jazeera | RSS feed | Global South, Middle East |
-| `nyt` | New York Times | RSS feed | US/global, in-depth |
-| `fox` | Fox News | RSS feed | US conservative perspective |
-
-All 5 sources are free, no signup or API key registration needed.
-
-## Node.js Usage
-
-```js
-const WorldNews = require('./worldnews');
-const news = new WorldNews();
-
-// Fetch all sources, 20 articles each
-const result = await news.fetchAll();
-console.log(result.briefSummary);    // LLM-ready
-console.log(result.detailedSummary); // with URLs
-console.log(JSON.stringify(result.toJson(), null, 2)); // JSON
-
-// Custom: 5 articles from BBC and Guardian
-const custom = await news.fetchAll(5, ['bbc', 'guardian']);
-
-// Single source
-const aj = await news.fetchSource('aj', 20);
+```bash
+node worldnews.js                  # all sources, 20 each
+node worldnews.js 5 bbc guardian   # 5 articles from BBC and Guardian only
 ```
 
-## Files
+## Module Usage
 
-| File | Description |
-|------|-------------|
-| `worldnews.js` | Node.js — async/await, built-in APIs only |
-| `SKILL.md` | This documentation |
+```js
+const news = new (require('./worldnews'))();
+const r = await news.fetchAll();                  // all sources, 20 each
+const r = await news.fetchAll(5, ['bbc','guardian']); // custom
+const r = await news.fetchSource('aj', 10);       // single
 
-## API Methods
+r.briefSummary    // one-liner per article, best for LLM input
+r.detailedSummary // with URLs and descriptions
+r.toJson()        // raw data
+```
 
-| Method | Args | Returns |
-|--------|------|---------|
-| `fetchAll()` | — | `NewsResult` (all sources, 20 each) |
-| `fetchAll(count, sources)` | number, string[] | `NewsResult` (custom) |
-| `fetchSource(code, count)` | string, number | `NewsResult` (single source) |
+## Sources
 
-## Design
-
-- **Fetch only** — no LLM dependency
-- **LLM-ready output** — `briefSummary` designed for direct LLM piping
-- **5 global perspectives** — UK, international, Global South, US mainstream, US conservative
-- **Guardian JSON API** — parsed with `JSON.parse`, others with regex-based RSS parser
-- **Async** — all network calls use native `https`/`http` with Promises
-- **Zero config** — works out of the box, no keys needed
+- `guardian` — The Guardian (UK/global, JSON API)
+- `bbc` — BBC News World (international, balanced)
+- `aj` — Al Jazeera (Global South, Middle East)
+- `nyt` — New York Times (US/global, in-depth)
+- `fox` — Fox News (US conservative perspective)

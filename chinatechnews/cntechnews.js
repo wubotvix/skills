@@ -1,27 +1,10 @@
-/**
- * AutoClaw CN Tech News Skill
- * Aggregates top 20 Chinese tech news from 4 sources via RSS.
- * No external dependencies. Node.js built-in APIs only.
- * Content in Chinese.
- *
- * Sources (RSS):
- *   36kr    = 36氪 (36kr.com/feed)
- *   tmt     = 钛媒体 (tmtpost.com/rss.xml)
- *   ithome  = IT之家 (ithome.com/rss/)
- *   sspai   = 少数派 (sspai.com/feed)
- *
- * Usage:
- *   const CNTechNews = require('./CNTechNews');
- *   const news = new CNTechNews();
- *   const result = await news.fetchAll();
- *   const result = await news.fetchAll(10, ['36kr', 'ithome']);
- */
+// eClaw China Tech News — RSS aggregator (36氪, 钛媒体, IT之家, 少数派). No deps.
 
 const https = require('https');
 const http = require('http');
 
 const TIMEOUT = 15000;
-const UA = 'AutoClaw-CNTechNews/1.0';
+const UA = 'eClaw-CNTechNews/1.0';
 const DEFAULT_COUNT = 20;
 
 const SOURCE_NAMES = {
@@ -220,3 +203,15 @@ class CNTechNews {
 }
 
 module.exports = CNTechNews;
+
+// CLI: node cntechnews.js [count] [sources...]
+// e.g. node cntechnews.js 10 36kr ithome
+if (require.main === module) {
+  const args = process.argv.slice(2);
+  const count = args.length && /^\d+$/.test(args[0]) ? Number(args.shift()) : DEFAULT_COUNT;
+  const sources = args.length ? args : null;
+  new CNTechNews().fetchAll(count, sources).then(r => console.log(r.briefSummary)).catch(e => {
+    console.error(e.message);
+    process.exit(1);
+  });
+}

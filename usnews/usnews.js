@@ -1,25 +1,10 @@
-/**
- * AutoClaw Top-20 US News Skill — fetch & format for LLM
- * Pulls top 20 daily US news from 3 major sources via RSS.
- * No external dependencies. Node.js built-in APIs only.
- *
- * Sources:
- *   nyt = New York Times US (RSS)
- *   fox = Fox News US (RSS)
- *   npr = NPR News (RSS)
- *
- * Usage:
- *   const USNews = require('./USNews');
- *   const news = new USNews();
- *   const result = await news.fetchAll();
- *   const result = await news.fetchAll(5, ['nyt', 'fox']);
- */
+// eClaw US News — RSS aggregator (NYT, Fox, NPR). No deps.
 
 const https = require('https');
 const http = require('http');
 
 const TIMEOUT = 12000;
-const UA = 'AutoClaw-USNews/1.0';
+const UA = 'eClaw-USNews/1.0';
 const DEFAULT_COUNT = 20;
 
 const SOURCE_NAMES = { nyt: 'New York Times', fox: 'Fox News', npr: 'NPR' };
@@ -208,3 +193,15 @@ class USNews {
 }
 
 module.exports = USNews;
+
+// CLI: node usnews.js [count] [sources...]
+// e.g. node usnews.js 5 nyt fox
+if (require.main === module) {
+  const args = process.argv.slice(2);
+  const count = args.length && /^\d+$/.test(args[0]) ? Number(args.shift()) : DEFAULT_COUNT;
+  const sources = args.length ? args : null;
+  new USNews().fetchAll(count, sources).then(r => console.log(r.briefSummary)).catch(e => {
+    console.error(e.message);
+    process.exit(1);
+  });
+}

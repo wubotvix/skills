@@ -1,27 +1,10 @@
-/**
- * AutoClaw Top-20 World News Skill — fetch & format for LLM
- * Pulls top 20 daily world news from 5 major international sources.
- * No external dependencies. Node.js built-in APIs only.
- *
- * Sources:
- *   guardian = The Guardian (JSON API, free)
- *   bbc      = BBC News World (RSS)
- *   aj       = Al Jazeera (RSS)
- *   nyt      = New York Times World (RSS)
- *   fox      = Fox News World (RSS)
- *
- * Usage:
- *   const WorldNews = require('./WorldNews');
- *   const news = new WorldNews();
- *   const result = await news.fetchAll();
- *   const result = await news.fetchAll(5, ['bbc', 'nyt']);
- */
+// eClaw World News — RSS/JSON aggregator (Guardian, BBC, Al Jazeera, NYT, Fox). No deps.
 
 const https = require('https');
 const http = require('http');
 
 const TIMEOUT = 12000;
-const UA = 'AutoClaw-WorldNews/1.0';
+const UA = 'eClaw-WorldNews/1.0';
 const DEFAULT_COUNT = 20;
 
 const SOURCE_NAMES = {
@@ -257,3 +240,15 @@ class WorldNews {
 }
 
 module.exports = WorldNews;
+
+// CLI: node worldnews.js [count] [sources...]
+// e.g. node worldnews.js 5 bbc guardian
+if (require.main === module) {
+  const args = process.argv.slice(2);
+  const count = args.length && /^\d+$/.test(args[0]) ? Number(args.shift()) : DEFAULT_COUNT;
+  const sources = args.length ? args : null;
+  new WorldNews().fetchAll(count, sources).then(r => console.log(r.briefSummary)).catch(e => {
+    console.error(e.message);
+    process.exit(1);
+  });
+}

@@ -1,31 +1,10 @@
-/**
- * AutoClaw Startup News Skill — fetch & format for LLM
- * Aggregates startup/tech news from 5 sources.
- * No external dependencies. Node.js built-in APIs only.
- *
- * Sources (web scrape):
- *   tm = TechMeme (techmeme.com) — top tech headlines
- *   tc = TechCrunch (techcrunch.com) — startup/funding news
- *
- * Sources (JSON API):
- *   hn = Hacker News (Algolia API) — top stories by points
- *
- * Sources (RSS):
- *   vb = VentureBeat (RSS feed)
- *   cb = Crunchbase News (RSS feed)
- *
- * Usage:
- *   const StartupNews = require('./StartupNews');
- *   const news = new StartupNews();
- *   const result = await news.fetchAll();
- *   const result = await news.fetchAll(5, ['hn', 'tc']);
- */
+// eClaw Startup News — aggregator (TechMeme, TechCrunch, HN, VentureBeat, Crunchbase). No deps.
 
 const https = require('https');
 const http = require('http');
 
 const TIMEOUT = 12000;
-const UA = 'AutoClaw-StartupNews/1.0';
+const UA = 'eClaw-StartupNews/1.0';
 const MAX_ARTICLES = 20;
 
 const SOURCE_NAMES = {
@@ -306,3 +285,15 @@ class StartupNews {
 }
 
 module.exports = StartupNews;
+
+// CLI: node startupnews.js [count] [sources...]
+// e.g. node startupnews.js 5 hn cb
+if (require.main === module) {
+  const args = process.argv.slice(2);
+  const count = args.length && /^\d+$/.test(args[0]) ? Number(args.shift()) : MAX_ARTICLES;
+  const sources = args.length ? args : null;
+  new StartupNews().fetchAll(count, sources).then(r => console.log(r.briefSummary)).catch(e => {
+    console.error(e.message);
+    process.exit(1);
+  });
+}

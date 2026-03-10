@@ -1,29 +1,10 @@
-/**
- * AutoClaw ELA Phonics Interactive Tutor
- * No external dependencies. Node.js built-in APIs only.
- *
- * CLI Usage (all output is JSON for LLM consumption):
- *   node phonics.js start <studentId> [grade]
- *   node phonics.js lesson <studentId>
- *   node phonics.js exercise <studentId> <type>
- *   node phonics.js check <studentId> <exerciseType> <prompt> <studentAnswer>
- *   node phonics.js record <studentId> <grade> <category> <skill> <score> <total> [notes]
- *   node phonics.js progress <studentId>
- *   node phonics.js report <studentId>
- *   node phonics.js next <studentId>
- *   node phonics.js catalog [grade]
- *   node phonics.js students
- *   node phonics.js set-grade <studentId> <grade>
- */
+// eClaw ELA Phonics Interactive Tutor (K-3). No deps.
 
 const fs = require('fs');
 const path = require('path');
 
-const AGENT_DIR = path.join(__dirname, '..', '..', 'autoclaw', 'agent-id');
-const DATA_DIR = path.join(AGENT_DIR, 'data', 'ela-phonics');
+const DATA_DIR = path.join(__dirname, '..', '..', 'data', 'ela-phonics');
 const MASTERY_THRESHOLD = 0.8;
-
-// ── Skill Catalog ────────────────────────────────────────
 
 const SKILLS = {
   'pre-k': {
@@ -62,8 +43,6 @@ const SKILLS = {
     'homophones': ['their-there-theyre', 'to-too-two'],
   },
 };
-
-// ── Word Banks ───────────────────────────────────────────
 
 const WORD_BANKS = {
   'pre-k': {
@@ -140,39 +119,25 @@ const WORD_BANKS = {
     'short-u': { words: ['cup', 'pup', 'up', 'bus', 'gum', 'hug', 'bug', 'rug', 'mug', 'jug', 'tug', 'dug', 'sun', 'run', 'fun', 'bun', 'gun', 'nun', 'cut', 'nut'] },
     'cvc-blending': {
       words: [
-        { sounds: ['/k/', '/æ/', '/t/'], word: 'cat' },
-        { sounds: ['/d/', '/ɒ/', '/g/'], word: 'dog' },
-        { sounds: ['/s/', '/ɪ/', '/t/'], word: 'sit' },
-        { sounds: ['/h/', '/ɒ/', '/t/'], word: 'hot' },
-        { sounds: ['/k/', '/ʌ/', '/p/'], word: 'cup' },
-        { sounds: ['/b/', '/æ/', '/t/'], word: 'bat' },
-        { sounds: ['/p/', '/ɪ/', '/g/'], word: 'pig' },
-        { sounds: ['/r/', '/ʌ/', '/n/'], word: 'run' },
-        { sounds: ['/m/', '/æ/', '/p/'], word: 'map' },
-        { sounds: ['/b/', '/ɛ/', '/d/'], word: 'bed' },
-        { sounds: ['/f/', '/ɪ/', '/n/'], word: 'fin' },
-        { sounds: ['/h/', '/ɛ/', '/n/'], word: 'hen' },
-        { sounds: ['/t/', '/ɒ/', '/p/'], word: 'top' },
-        { sounds: ['/g/', '/ʌ/', '/m/'], word: 'gum' },
+        { sounds: ['/k/', '/æ/', '/t/'], word: 'cat' }, { sounds: ['/d/', '/ɒ/', '/g/'], word: 'dog' },
+        { sounds: ['/s/', '/ɪ/', '/t/'], word: 'sit' }, { sounds: ['/h/', '/ɒ/', '/t/'], word: 'hot' },
+        { sounds: ['/k/', '/ʌ/', '/p/'], word: 'cup' }, { sounds: ['/b/', '/æ/', '/t/'], word: 'bat' },
+        { sounds: ['/p/', '/ɪ/', '/g/'], word: 'pig' }, { sounds: ['/r/', '/ʌ/', '/n/'], word: 'run' },
+        { sounds: ['/m/', '/æ/', '/p/'], word: 'map' }, { sounds: ['/b/', '/ɛ/', '/d/'], word: 'bed' },
+        { sounds: ['/f/', '/ɪ/', '/n/'], word: 'fin' }, { sounds: ['/h/', '/ɛ/', '/n/'], word: 'hen' },
+        { sounds: ['/t/', '/ɒ/', '/p/'], word: 'top' }, { sounds: ['/g/', '/ʌ/', '/m/'], word: 'gum' },
         { sounds: ['/n/', '/ɛ/', '/t/'], word: 'net' },
       ],
     },
     'cvc-segmenting': {
       words: [
-        { word: 'cat', sounds: '/k/ /æ/ /t/' },
-        { word: 'dog', sounds: '/d/ /ɒ/ /g/' },
-        { word: 'sit', sounds: '/s/ /ɪ/ /t/' },
-        { word: 'hot', sounds: '/h/ /ɒ/ /t/' },
-        { word: 'cup', sounds: '/k/ /ʌ/ /p/' },
-        { word: 'bat', sounds: '/b/ /æ/ /t/' },
-        { word: 'pig', sounds: '/p/ /ɪ/ /g/' },
-        { word: 'run', sounds: '/r/ /ʌ/ /n/' },
-        { word: 'map', sounds: '/m/ /æ/ /p/' },
-        { word: 'bed', sounds: '/b/ /ɛ/ /d/' },
-        { word: 'fin', sounds: '/f/ /ɪ/ /n/' },
-        { word: 'hen', sounds: '/h/ /ɛ/ /n/' },
-        { word: 'top', sounds: '/t/ /ɒ/ /p/' },
-        { word: 'gum', sounds: '/g/ /ʌ/ /m/' },
+        { word: 'cat', sounds: '/k/ /æ/ /t/' }, { word: 'dog', sounds: '/d/ /ɒ/ /g/' },
+        { word: 'sit', sounds: '/s/ /ɪ/ /t/' }, { word: 'hot', sounds: '/h/ /ɒ/ /t/' },
+        { word: 'cup', sounds: '/k/ /ʌ/ /p/' }, { word: 'bat', sounds: '/b/ /æ/ /t/' },
+        { word: 'pig', sounds: '/p/ /ɪ/ /g/' }, { word: 'run', sounds: '/r/ /ʌ/ /n/' },
+        { word: 'map', sounds: '/m/ /æ/ /p/' }, { word: 'bed', sounds: '/b/ /ɛ/ /d/' },
+        { word: 'fin', sounds: '/f/ /ɪ/ /n/' }, { word: 'hen', sounds: '/h/ /ɛ/ /n/' },
+        { word: 'top', sounds: '/t/ /ɒ/ /p/' }, { word: 'gum', sounds: '/g/ /ʌ/ /m/' },
         { word: 'net', sounds: '/n/ /ɛ/ /t/' },
       ],
     },
@@ -279,8 +244,6 @@ const WORD_BANKS = {
   },
 };
 
-// ── Decodable Texts ──────────────────────────────────────
-
 const DECODABLE_TEXTS = {
   'kindergarten': [
     { title: 'The Cat', focus: 'short-a CVC', text: 'The cat sat on a mat. The cat had a hat. The fat cat napped on the mat.' },
@@ -306,459 +269,219 @@ const DECODABLE_TEXTS = {
   ],
 };
 
-// ── File I/O ─────────────────────────────────────────────
+// File I/O
 
-function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-}
+function ensureDataDir() { if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true }); }
 
-function profilePath(studentId) {
-  const safe = String(studentId).replace(/[^a-zA-Z0-9_-]/g, '_');
-  return path.join(DATA_DIR, `${safe}.json`);
-}
+function profilePath(id) { return path.join(DATA_DIR, String(id).replace(/[^a-zA-Z0-9_-]/g, '_') + '.json'); }
 
-function loadProfile(studentId) {
-  const fp = profilePath(studentId);
+function loadProfile(id) {
+  const fp = profilePath(id);
   if (fs.existsSync(fp)) {
-    try {
-      return JSON.parse(fs.readFileSync(fp, 'utf8'));
-    } catch {
-      fs.renameSync(fp, fp + '.corrupt.' + Date.now());
-    }
+    try { return JSON.parse(fs.readFileSync(fp, 'utf8')); }
+    catch { fs.renameSync(fp, fp + '.corrupt.' + Date.now()); }
   }
-  return { studentId, grade: null, createdAt: new Date().toISOString(), assessments: [], skills: {} };
+  return { studentId: id, grade: null, createdAt: new Date().toISOString(), assessments: [], skills: {} };
 }
 
-function saveProfile(profile) {
-  ensureDataDir();
-  fs.writeFileSync(profilePath(profile.studentId), JSON.stringify(profile, null, 2), 'utf8');
+function saveProfile(p) { ensureDataDir(); fs.writeFileSync(profilePath(p.studentId), JSON.stringify(p, null, 2), 'utf8'); }
+
+// Helpers
+
+function calcMastery(attempts) {
+  if (!attempts.length) return 0;
+  const recent = attempts.slice(-5).filter(a => a.total > 0);
+  return recent.length ? Math.round(recent.reduce((s, a) => s + a.score / a.total, 0) / recent.length * 100) / 100 : 0;
 }
 
-// ── Mastery Calculation ──────────────────────────────────
-
-function calcMastery(assessments) {
-  if (assessments.length === 0) return 0;
-  const recent = assessments.slice(-5);
-  const total = recent.reduce((sum, a) => a.total > 0 ? sum + a.score / a.total : sum, 0);
-  const valid = recent.filter(a => a.total > 0).length;
-  return valid === 0 ? 0 : Math.round((total / valid) * 100) / 100;
-}
-
-function masteryLabel(ratio) {
-  if (ratio >= 0.9) return 'mastered';
-  if (ratio >= MASTERY_THRESHOLD) return 'proficient';
-  if (ratio >= 0.6) return 'developing';
-  if (ratio > 0) return 'emerging';
-  return 'not-started';
-}
-
-// ── Helpers ──────────────────────────────────────────────
+function masteryLabel(r) { return r >= 0.9 ? 'mastered' : r >= MASTERY_THRESHOLD ? 'proficient' : r >= 0.6 ? 'developing' : r > 0 ? 'emerging' : 'not-started'; }
 
 function shuffle(arr) {
   const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
   return a;
 }
 
-function pick(arr, n) {
-  return shuffle(arr).slice(0, Math.min(n, arr.length));
-}
+function pick(arr, n) { return shuffle(arr).slice(0, Math.min(n, arr.length)); }
 
 function resolveSkillKey(grade, skill) {
-  const gradeSkills = SKILLS[grade];
-  if (!gradeSkills) return null;
-  for (const [category, skills] of Object.entries(gradeSkills)) {
-    if (skills.includes(skill)) return { grade, category, skill };
-  }
+  const gs = SKILLS[grade];
+  if (!gs) return null;
+  for (const [cat, skills] of Object.entries(gs)) { if (skills.includes(skill)) return { grade, category: cat, skill }; }
   return null;
 }
 
-// ── Exercise Generators ──────────────────────────────────
+function norm(s) { return String(s).toLowerCase().trim().replace(/[^a-z0-9 ]/g, ''); }
+
+// Exercise generation — dispatch table for special types, fallback to decode
+
+function exResult(type, skill, grade, instruction, items) { return { type, skill, grade, count: items.length, instruction, items }; }
 
 function generateExercise(grade, skill, count = 5) {
-  const bank = WORD_BANKS[grade] && WORD_BANKS[grade][skill];
+  const bank = WORD_BANKS[grade]?.[skill];
   if (!bank) return { error: `No word bank for ${grade}/${skill}` };
 
-  // Rhyme recognition
-  if (skill === 'rhyme-recognition' && bank.pairs) {
-    const items = pick(bank.pairs, count);
-    return {
-      type: 'rhyme-recognition',
-      skill, grade, count: items.length,
-      instruction: 'Do these two words rhyme? Answer YES or NO.',
-      items: items.map(([w1, w2, rhymes]) => ({
-        prompt: `Do "${w1}" and "${w2}" rhyme?`,
-        answer: rhymes ? 'yes' : 'no',
-        word1: w1, word2: w2,
-      })),
-    };
-  }
+  if (skill === 'rhyme-recognition' && bank.pairs)
+    return exResult('rhyme-recognition', skill, grade, 'Do these two words rhyme? Answer YES or NO.',
+      pick(bank.pairs, count).map(([w1, w2, r]) => ({ prompt: `Do "${w1}" and "${w2}" rhyme?`, answer: r ? 'yes' : 'no', word1: w1, word2: w2 })));
 
-  // Rhyme production
-  if (skill === 'rhyme-production' && bank.prompts) {
-    const items = pick(bank.prompts, count);
-    return {
-      type: 'rhyme-production',
-      skill, grade, count: items.length,
-      instruction: 'Say a word that rhymes with the given word.',
-      items: items.map(p => ({
-        prompt: `What rhymes with "${p.word}"?`,
-        word: p.word,
-        acceptedAnswers: p.rhymes,
-      })),
-    };
-  }
+  if (skill === 'rhyme-production' && bank.prompts)
+    return exResult('rhyme-production', skill, grade, 'Say a word that rhymes with the given word.',
+      pick(bank.prompts, count).map(p => ({ prompt: `What rhymes with "${p.word}"?`, word: p.word, acceptedAnswers: p.rhymes })));
 
-  // Syllable counting
-  if (skill === 'syllable-counting' && bank.words) {
-    const items = pick(bank.words, count);
-    return {
-      type: 'syllable-counting',
-      skill, grade, count: items.length,
-      instruction: 'How many syllables (parts) does this word have? Clap it out!',
-      items: items.map(([word, syllables]) => ({
-        prompt: `How many syllables in "${word}"?`,
-        word, answer: syllables,
-      })),
-    };
-  }
+  if (skill === 'syllable-counting' && bank.words)
+    return exResult('syllable-counting', skill, grade, 'How many syllables (parts) does this word have? Clap it out!',
+      pick(bank.words, count).map(([w, n]) => ({ prompt: `How many syllables in "${w}"?`, word: w, answer: n })));
 
-  // Initial sounds
-  if (skill === 'initial-sounds' && bank.words) {
-    const items = pick(bank.words, count);
-    return {
-      type: 'initial-sounds',
-      skill, grade, count: items.length,
-      instruction: 'What sound does this word start with?',
-      items: items.map(([word, sound]) => ({
-        prompt: `What sound does "${word}" start with?`,
-        word, answer: sound,
-      })),
-    };
-  }
+  if (skill === 'initial-sounds' && bank.words)
+    return exResult('initial-sounds', skill, grade, 'What sound does this word start with?',
+      pick(bank.words, count).map(([w, s]) => ({ prompt: `What sound does "${w}" start with?`, word: w, answer: s })));
 
-  // Blending onset-rime
-  if (skill === 'blending-onset-rime' && bank.words) {
-    const items = pick(bank.words, count);
-    return {
-      type: 'blend',
-      skill, grade, count: items.length,
-      instruction: 'Blend these sounds together. What word do they make?',
-      items: items.map(([onset, rime, word]) => ({
-        prompt: `${onset} + ${rime} = ?`,
-        answer: word,
-      })),
-    };
-  }
+  if (skill === 'blending-onset-rime' && bank.words)
+    return exResult('blend', skill, grade, 'Blend these sounds together. What word do they make?',
+      pick(bank.words, count).map(([onset, rime, w]) => ({ prompt: `${onset} + ${rime} = ?`, answer: w })));
 
-  // Letter sounds
-  if (skill === 'letter-names-and-sounds' && bank.letters) {
-    const items = pick(bank.letters, count);
-    return {
-      type: 'letter-sounds',
-      skill, grade, count: items.length,
-      instruction: 'What sound does this letter make?',
-      items: items.map(([letter, sound, example]) => ({
-        prompt: `What sound does the letter "${letter}" make?`,
-        letter, answer: sound, hint: `as in "${example}"`,
-      })),
-    };
-  }
+  if (skill === 'letter-names-and-sounds' && bank.letters)
+    return exResult('letter-sounds', skill, grade, 'What sound does this letter make?',
+      pick(bank.letters, count).map(([l, s, ex]) => ({ prompt: `What sound does the letter "${l}" make?`, letter: l, answer: s, hint: `as in "${ex}"` })));
 
-  // CVC blending
-  if (skill === 'cvc-blending' && bank.words && bank.words[0] && bank.words[0].sounds) {
-    const items = pick(bank.words, count);
-    return {
-      type: 'blend',
-      skill, grade, count: items.length,
-      instruction: 'Blend these sounds together. What word do they make?',
-      items: items.map(w => ({
-        prompt: `${w.sounds.join(' ')} = ?`,
-        sounds: w.sounds, answer: w.word,
-      })),
-    };
-  }
+  if (skill === 'cvc-blending' && bank.words?.[0]?.sounds)
+    return exResult('blend', skill, grade, 'Blend these sounds together. What word do they make?',
+      pick(bank.words, count).map(w => ({ prompt: `${w.sounds.join(' ')} = ?`, sounds: w.sounds, answer: w.word })));
 
-  // CVC segmenting
-  if (skill === 'cvc-segmenting' && bank.words && bank.words[0] && bank.words[0].sounds) {
-    const items = pick(bank.words, count);
-    return {
-      type: 'segment',
-      skill, grade, count: items.length,
-      instruction: 'Break this word into its individual sounds.',
-      items: items.map(w => ({
-        prompt: `What are the sounds in "${w.word}"?`,
-        word: w.word, answer: w.sounds,
-      })),
-    };
-  }
+  if (skill === 'cvc-segmenting' && bank.words?.[0]?.sounds)
+    return exResult('segment', skill, grade, 'Break this word into its individual sounds.',
+      pick(bank.words, count).map(w => ({ prompt: `What are the sounds in "${w.word}"?`, word: w.word, answer: w.sounds })));
 
-  // Sight words
-  if (skill === 'high-frequency-set-1') {
-    const items = pick(bank.words, count);
-    return {
-      type: 'sight-words',
-      skill, grade, count: items.length,
-      instruction: 'Read this word as fast as you can! (Type it to show you know it.)',
-      items: items.map(w => ({ prompt: w, answer: w })),
-    };
-  }
+  if (skill === 'high-frequency-set-1')
+    return exResult('sight-words', skill, grade, 'Read this word as fast as you can! (Type it to show you know it.)',
+      pick(bank.words, count).map(w => ({ prompt: w, answer: w })));
 
-  // Contractions
-  if (skill === 'common-contractions' && bank.pairs) {
-    const items = pick(bank.pairs, count);
-    return {
-      type: 'contractions',
-      skill, grade, count: items.length,
-      instruction: 'What is the contraction for these words? (Or: what words make this contraction?)',
-      items: items.map(([contraction, expanded]) => {
-        const askExpand = Math.random() > 0.5;
-        return askExpand
-          ? { prompt: `What is the contraction for "${expanded}"?`, answer: contraction, expanded }
-          : { prompt: `What does "${contraction}" stand for?`, answer: expanded, contraction };
-      }),
-    };
-  }
+  if (skill === 'common-contractions' && bank.pairs)
+    return exResult('contractions', skill, grade, 'What is the contraction for these words? (Or: what words make this contraction?)',
+      pick(bank.pairs, count).map(([c, e]) => Math.random() > 0.5
+        ? { prompt: `What is the contraction for "${e}"?`, answer: c, expanded: e }
+        : { prompt: `What does "${c}" stand for?`, answer: e, contraction: c }));
 
-  // Homophones (sentence fill-in)
-  if ((skill === 'their-there-theyre' || skill === 'to-too-two') && bank.sentences) {
-    const items = pick(bank.sentences, count);
-    return {
-      type: 'fill-in',
-      skill, grade, count: items.length,
-      instruction: 'Fill in the blank with the correct word.',
-      items: items.map(s => ({
-        prompt: s.sentence,
-        answer: s.answer,
-        explanation: s.explanation,
-      })),
-    };
-  }
+  if ((skill === 'their-there-theyre' || skill === 'to-too-two') && bank.sentences)
+    return exResult('fill-in', skill, grade, 'Fill in the blank with the correct word.',
+      pick(bank.sentences, count).map(s => ({ prompt: s.sentence, answer: s.answer, explanation: s.explanation })));
 
-  // Latin roots
   if (skill === 'struct-port-dict' && bank.roots) {
-    const allItems = [];
-    for (const r of bank.roots) {
-      for (const w of r.words) {
-        allItems.push({ word: w, root: r.root, meaning: r.meaning });
-      }
-    }
-    const items = pick(allItems, count);
-    return {
-      type: 'roots',
-      skill, grade, count: items.length,
-      instruction: 'What Latin root is in this word, and what does it mean?',
-      items: items.map(i => ({
-        prompt: `What root is in "${i.word}" and what does it mean?`,
-        word: i.word, root: i.root, meaning: i.meaning,
-        answer: `${i.root} (${i.meaning})`,
-      })),
-    };
+    const all = bank.roots.flatMap(r => r.words.map(w => ({ word: w, root: r.root, meaning: r.meaning })));
+    return exResult('roots', skill, grade, 'What Latin root is in this word, and what does it mean?',
+      pick(all, count).map(i => ({ prompt: `What root is in "${i.word}" and what does it mean?`, word: i.word, root: i.root, meaning: i.meaning, answer: `${i.root} (${i.meaning})` })));
   }
 
-  // ough patterns
   if (skill === 'ough-patterns' && bank.groups) {
-    const allWords = [];
-    for (const g of bank.groups) {
-      for (const w of g.words) {
-        allWords.push({ word: w, pattern: g.pattern });
-      }
-    }
-    const items = pick(allWords, count);
-    return {
-      type: 'decode',
-      skill, grade, count: items.length,
-      instruction: 'Read this word aloud. How is "ough" pronounced in this word?',
-      items: items.map(i => ({
-        prompt: `Read: "${i.word}" — How is "ough" said?`,
-        word: i.word, answer: i.pattern,
-      })),
-    };
+    const all = bank.groups.flatMap(g => g.words.map(w => ({ word: w, pattern: g.pattern })));
+    return exResult('decode', skill, grade, 'Read this word aloud. How is "ough" pronounced in this word?',
+      pick(all, count).map(i => ({ prompt: `Read: "${i.word}" — How is "ough" said?`, word: i.word, answer: i.pattern })));
   }
 
-  // Prefix/suffix words (grade-2 un-re, ful-less-ly and grade-3 prefixes)
-  if (bank.words && Array.isArray(bank.words) && bank.words[0] && Array.isArray(bank.words[0]) && bank.words[0].length === 3) {
-    const items = pick(bank.words, count);
-    return {
-      type: 'word-parts',
-      skill, grade, count: items.length,
-      instruction: 'Break this word into its prefix/suffix and base word.',
-      items: items.map(w => ({
-        prompt: `Break apart: "${w[0]}"`,
-        word: w[0], part1: w[1], part2: w[2],
-        answer: `${w[1]} + ${w[2]}`,
-      })),
-    };
+  if (bank.words && Array.isArray(bank.words[0]) && bank.words[0].length === 3) {
+    if (skill === 'three-plus-syllable-words')
+      return exResult('syllable-division', skill, grade, 'Divide this word into syllables.',
+        pick(bank.words, count).map(([w, d, n]) => ({ prompt: `Divide "${w}" into syllables.`, word: w, answer: d, syllableCount: n })));
+    return exResult('word-parts', skill, grade, 'Break this word into its prefix/suffix and base word.',
+      pick(bank.words, count).map(w => ({ prompt: `Break apart: "${w[0]}"`, word: w[0], part1: w[1], part2: w[2], answer: `${w[1]} + ${w[2]}` })));
   }
 
-  // Multisyllabic words (grade-3)
-  if (skill === 'three-plus-syllable-words' && bank.words && bank.words[0] && bank.words[0].length === 3) {
-    const items = pick(bank.words, count);
-    return {
-      type: 'syllable-division',
-      skill, grade, count: items.length,
-      instruction: 'Divide this word into syllables.',
-      items: items.map(([word, divided, syllableCount]) => ({
-        prompt: `Divide "${word}" into syllables.`,
-        word, answer: divided, syllableCount,
-      })),
-    };
-  }
-
-  // Default: decode/read words (most consonant/vowel pattern skills)
-  if (bank.words && typeof bank.words[0] === 'string') {
-    const items = pick(bank.words, count);
-    return {
-      type: 'decode',
-      skill, grade, count: items.length,
-      instruction: 'Read each word aloud. Then type it to show you can read it.',
-      items: items.map(w => ({
-        prompt: `Read this word: "${w}"`,
-        answer: w,
-      })),
-    };
-  }
+  if (bank.words && typeof bank.words[0] === 'string')
+    return exResult('decode', skill, grade, 'Read each word aloud. Then type it to show you can read it.',
+      pick(bank.words, count).map(w => ({ prompt: `Read this word: "${w}"`, answer: w })));
 
   return { error: `Cannot generate exercise for ${grade}/${skill}` };
 }
 
-// ── Answer Checking ──────────────────────────────────────
+// Answer checking — only rhyme-production needs array check, rest is string match
 
-function checkAnswer(exerciseType, expected, studentAnswer) {
-  const norm = s => String(s).toLowerCase().trim().replace(/[^a-z0-9 ]/g, '');
-
-  if (exerciseType === 'rhyme-recognition') {
-    const a = norm(studentAnswer);
-    return a === 'yes' || a === 'no' ? a === norm(expected) : false;
-  }
-
-  if (exerciseType === 'rhyme-production') {
-    // expected is an array of accepted rhymes
-    if (Array.isArray(expected)) {
-      return expected.some(r => norm(r) === norm(studentAnswer));
-    }
-    return norm(expected) === norm(studentAnswer);
-  }
-
-  if (exerciseType === 'syllable-counting' || exerciseType === 'initial-sounds') {
-    return norm(expected) === norm(studentAnswer);
-  }
-
-  if (exerciseType === 'fill-in') {
-    return norm(expected) === norm(studentAnswer);
-  }
-
-  // Default: string comparison
-  return norm(expected) === norm(studentAnswer);
+function checkAnswer(type, expected, answer) {
+  if (type === 'rhyme-production' && Array.isArray(expected))
+    return expected.some(r => norm(r) === norm(answer));
+  return norm(expected) === norm(answer);
 }
 
-// ── Public API (Class) ───────────────────────────────────
+// Public API
 
 class Phonics {
-  async getProfile(studentId) {
-    const p = loadProfile(studentId);
+  getProfile(id) {
+    const p = loadProfile(id);
     return { studentId: p.studentId, grade: p.grade, createdAt: p.createdAt, totalAssessments: p.assessments.length };
   }
 
-  async setGrade(studentId, grade) {
+  setGrade(id, grade) {
     if (!SKILLS[grade]) throw new Error(`Unknown grade: ${grade}. Valid: ${Object.keys(SKILLS).join(', ')}`);
-    const p = loadProfile(studentId);
-    p.grade = grade;
-    saveProfile(p);
-    return { studentId, grade };
+    const p = loadProfile(id); p.grade = grade; saveProfile(p);
+    return { studentId: id, grade };
   }
 
-  async recordAssessment(studentId, grade, category, skill, score, total, notes = '') {
+  recordAssessment(id, grade, category, skill, score, total, notes = '') {
     if (!SKILLS[grade]) throw new Error(`Unknown grade: ${grade}`);
     if (!SKILLS[grade][category]) throw new Error(`Unknown category '${category}' for ${grade}`);
     if (!SKILLS[grade][category].includes(skill)) throw new Error(`Unknown skill '${skill}' in ${grade}/${category}`);
     if (typeof total !== 'number' || total <= 0) throw new Error('total must be positive');
     if (typeof score !== 'number' || score < 0 || score > total) throw new Error(`score must be 0-${total}`);
 
-    const p = loadProfile(studentId);
+    const p = loadProfile(id);
     if (!p.grade) p.grade = grade;
-
     const entry = { date: new Date().toISOString(), grade, category, skill, score, total, notes };
     p.assessments.push(entry);
-
     const key = `${grade}/${category}/${skill}`;
     if (!p.skills[key]) p.skills[key] = { attempts: [] };
     p.skills[key].attempts.push({ date: entry.date, score, total });
     p.skills[key].mastery = calcMastery(p.skills[key].attempts);
     p.skills[key].label = masteryLabel(p.skills[key].mastery);
     saveProfile(p);
-
-    return { studentId, skill: key, score: `${score}/${total}`, mastery: p.skills[key].mastery, label: p.skills[key].label };
+    return { studentId: id, skill: key, score: `${score}/${total}`, mastery: p.skills[key].mastery, label: p.skills[key].label };
   }
 
-  async getProgress(studentId) {
-    const p = loadProfile(studentId);
+  getProgress(id) {
+    const p = loadProfile(id);
     const grade = p.grade || 'pre-k';
-    const gradeSkills = SKILLS[grade] || {};
+    const gs = SKILLS[grade] || {};
     const results = {};
-    let masteredCount = 0, totalCount = 0;
-
-    for (const [category, skills] of Object.entries(gradeSkills)) {
-      results[category] = {};
-      for (const skill of skills) {
-        totalCount++;
-        const key = `${grade}/${category}/${skill}`;
-        const data = p.skills[key];
-        if (data) {
-          results[category][skill] = { mastery: data.mastery, label: data.label };
-          if (data.mastery >= MASTERY_THRESHOLD) masteredCount++;
-        } else {
-          results[category][skill] = { mastery: 0, label: 'not-started' };
-        }
+    let mastered = 0, total = 0;
+    for (const [cat, skills] of Object.entries(gs)) {
+      results[cat] = {};
+      for (const sk of skills) {
+        total++;
+        const d = p.skills[`${grade}/${cat}/${sk}`];
+        results[cat][sk] = d ? { mastery: d.mastery, label: d.label } : { mastery: 0, label: 'not-started' };
+        if (d && d.mastery >= MASTERY_THRESHOLD) mastered++;
       }
     }
-
-    return { studentId, grade, mastered: masteredCount, total: totalCount, overallPct: totalCount > 0 ? Math.round((masteredCount / totalCount) * 100) : 0, skills: results };
+    return { studentId: id, grade, mastered, total, overallPct: total > 0 ? Math.round(mastered / total * 100) : 0, skills: results };
   }
 
-  async getNextSkills(studentId, count = 5) {
-    const p = loadProfile(studentId);
+  getNextSkills(id, count = 5) {
+    const p = loadProfile(id);
     const grade = p.grade || 'pre-k';
-    const gradeSkills = SKILLS[grade] || {};
     const candidates = [];
-
-    for (const [category, skills] of Object.entries(gradeSkills)) {
-      for (const skill of skills) {
-        const key = `${grade}/${category}/${skill}`;
-        const data = p.skills[key];
-        const mastery = data ? data.mastery : 0;
-        if (mastery < MASTERY_THRESHOLD) {
-          candidates.push({ grade, category, skill, mastery, label: data ? data.label : 'not-started' });
-        }
+    for (const [cat, skills] of Object.entries(SKILLS[grade] || {})) {
+      for (const sk of skills) {
+        const d = p.skills[`${grade}/${cat}/${sk}`];
+        const m = d ? d.mastery : 0;
+        if (m < MASTERY_THRESHOLD) candidates.push({ grade, category: cat, skill: sk, mastery: m, label: d ? d.label : 'not-started' });
       }
     }
-
-    candidates.sort((a, b) => {
-      const order = { developing: 0, emerging: 1, 'not-started': 2 };
-      const oa = order[a.label] ?? 3, ob = order[b.label] ?? 3;
-      return oa !== ob ? oa - ob : b.mastery - a.mastery;
-    });
-
-    return { studentId, grade, next: candidates.slice(0, count) };
+    const order = { developing: 0, emerging: 1, 'not-started': 2 };
+    candidates.sort((a, b) => (order[a.label] ?? 3) - (order[b.label] ?? 3) || b.mastery - a.mastery);
+    return { studentId: id, grade, next: candidates.slice(0, count) };
   }
 
-  async getReport(studentId) {
-    const p = loadProfile(studentId);
-    const progress = await this.getProgress(studentId);
-    const recent = p.assessments.slice(-20).reverse();
-    return { studentId, grade: p.grade, progress, recentAssessments: recent };
+  getReport(id) {
+    const p = loadProfile(id);
+    return { studentId: id, grade: p.grade, progress: this.getProgress(id), recentAssessments: p.assessments.slice(-20).reverse() };
   }
 
-  async listStudents() {
+  listStudents() {
     ensureDataDir();
     const files = fs.readdirSync(DATA_DIR).filter(f => f.endsWith('.json'));
     return { count: files.length, students: files.map(f => f.replace(/\.json$/, '')) };
   }
 
-  async getSkillCatalog(grade) {
+  getSkillCatalog(grade) {
     const gs = SKILLS[grade];
     if (!gs) return { grade, error: `Unknown grade. Valid: ${Object.keys(SKILLS).join(', ')}` };
     let total = 0;
@@ -767,37 +490,27 @@ class Phonics {
     return { grade, skills: catalog, totalSkills: total };
   }
 
-  async generateExercise(grade, skill, count = 5) {
-    return generateExercise(grade, skill, count);
-  }
+  generateExercise(grade, skill, count = 5) { return generateExercise(grade, skill, count); }
 
-  async checkAnswer(exerciseType, expected, studentAnswer) {
-    return { correct: checkAnswer(exerciseType, expected, studentAnswer), expected, studentAnswer };
-  }
+  checkAnswer(type, expected, answer) { return { correct: checkAnswer(type, expected, answer), expected, studentAnswer: answer }; }
 
-  async getDecodableText(grade) {
+  getDecodableText(grade) {
     const texts = DECODABLE_TEXTS[grade];
     if (!texts) return { error: `No decodable texts for ${grade}. Available: ${Object.keys(DECODABLE_TEXTS).join(', ')}` };
     return pick(texts, 1)[0];
   }
 
-  async generateLesson(studentId) {
-    const p = loadProfile(studentId);
+  generateLesson(id) {
+    const p = loadProfile(id);
     const grade = p.grade || 'pre-k';
-    const nextResult = await this.getNextSkills(studentId, 3);
-    const target = nextResult.next[0];
+    const target = this.getNextSkills(id, 3).next[0];
     if (!target) return { message: `All skills at ${grade} level are proficient! Ready for next grade.`, grade };
-
     const exercise = generateExercise(grade, target.skill, 5);
     const text = DECODABLE_TEXTS[grade] ? pick(DECODABLE_TEXTS[grade], 1)[0] : null;
-
     return {
-      studentId, grade,
-      targetSkill: target,
-      exercise,
-      decodableText: text,
+      studentId: id, grade, targetSkill: target, exercise, decodableText: text,
       lessonPlan: {
-        review: `Review previously learned patterns (2-3 min)`,
+        review: 'Review previously learned patterns (2-3 min)',
         teach: `Introduce/reinforce: ${target.category} → ${target.skill}`,
         practice: `Complete ${exercise.count || 0} practice items`,
         apply: text ? `Read decodable text: "${text.title}"` : 'Practice reading words in sentences',
@@ -807,153 +520,54 @@ class Phonics {
   }
 }
 
-// ── CLI Dispatcher ───────────────────────────────────────
+module.exports = Phonics;
 
-async function main() {
+// CLI: node phonics.js <command> [args]
+if (require.main === module) {
   const args = process.argv.slice(2);
   const cmd = args[0];
-  const phonics = new Phonics();
-
-  const output = (data) => {
-    console.log(JSON.stringify(data, null, 2));
-  };
+  const ph = new Phonics();
+  const out = d => console.log(JSON.stringify(d, null, 2));
 
   try {
     switch (cmd) {
       case 'start': {
-        const [, studentId, grade] = args;
-        if (!studentId) throw new Error('Usage: start <studentId> [grade]');
-        if (grade) await phonics.setGrade(studentId, grade);
-        const profile = await phonics.getProfile(studentId);
-        const next = await phonics.getNextSkills(studentId);
-        output({ action: 'start', profile, nextSkills: next });
+        const [, id, grade] = args;
+        if (!id) throw new Error('Usage: start <id> [grade]');
+        if (grade) ph.setGrade(id, grade);
+        out({ action: 'start', profile: ph.getProfile(id), nextSkills: ph.getNextSkills(id) });
         break;
       }
-
-      case 'lesson': {
-        const [, studentId] = args;
-        if (!studentId) throw new Error('Usage: lesson <studentId>');
-        output(await phonics.generateLesson(studentId));
-        break;
-      }
-
+      case 'lesson': { const [, id] = args; if (!id) throw new Error('Usage: lesson <id>'); out(ph.generateLesson(id)); break; }
       case 'exercise': {
-        const [, studentId, type] = args;
-        if (!studentId) throw new Error('Usage: exercise <studentId> [skill]');
-        const p = loadProfile(studentId);
-        const grade = p.grade || 'pre-k';
-        if (type) {
-          output(await phonics.generateExercise(grade, type, 5));
-        } else {
-          const next = await phonics.getNextSkills(studentId, 1);
-          if (next.next.length === 0) {
-            output({ message: 'All skills proficient at current grade!' });
-          } else {
-            const skill = next.next[0].skill;
-            output(await phonics.generateExercise(grade, skill, 5));
-          }
-        }
+        const [, id, type] = args;
+        if (!id) throw new Error('Usage: exercise <id> [skill]');
+        const grade = loadProfile(id).grade || 'pre-k';
+        if (type) { out(ph.generateExercise(grade, type, 5)); }
+        else { const n = ph.getNextSkills(id, 1).next; out(n.length ? ph.generateExercise(grade, n[0].skill, 5) : { message: 'All skills proficient at current grade!' }); }
         break;
       }
-
       case 'check': {
-        const [, , exerciseType, expected, studentAnswer] = args;
-        if (!exerciseType || expected === undefined || studentAnswer === undefined) {
-          throw new Error('Usage: check <studentId> <exerciseType> <expected> <studentAnswer>');
-        }
-        let exp = expected;
-        try { exp = JSON.parse(expected); } catch {}
-        output(await phonics.checkAnswer(exerciseType, exp, studentAnswer));
+        const [, , type, expected, answer] = args;
+        if (!type || expected === undefined || answer === undefined) throw new Error('Usage: check <id> <type> <expected> <answer>');
+        let exp = expected; try { exp = JSON.parse(expected); } catch {}
+        out(ph.checkAnswer(type, exp, answer));
         break;
       }
-
       case 'record': {
-        const [, studentId, grade, category, skill, scoreStr, totalStr, ...notesParts] = args;
-        if (!studentId || !grade || !category || !skill || !scoreStr || !totalStr) {
-          throw new Error('Usage: record <studentId> <grade> <category> <skill> <score> <total> [notes]');
-        }
-        output(await phonics.recordAssessment(studentId, grade, category, skill, Number(scoreStr), Number(totalStr), notesParts.join(' ')));
+        const [, id, grade, cat, skill, sc, tot, ...notes] = args;
+        if (!id || !grade || !cat || !skill || !sc || !tot) throw new Error('Usage: record <id> <grade> <cat> <skill> <score> <total> [notes]');
+        out(ph.recordAssessment(id, grade, cat, skill, Number(sc), Number(tot), notes.join(' ')));
         break;
       }
-
-      case 'progress': {
-        const [, studentId] = args;
-        if (!studentId) throw new Error('Usage: progress <studentId>');
-        output(await phonics.getProgress(studentId));
-        break;
-      }
-
-      case 'report': {
-        const [, studentId] = args;
-        if (!studentId) throw new Error('Usage: report <studentId>');
-        output(await phonics.getReport(studentId));
-        break;
-      }
-
-      case 'next': {
-        const [, studentId, countStr] = args;
-        if (!studentId) throw new Error('Usage: next <studentId> [count]');
-        output(await phonics.getNextSkills(studentId, countStr ? Number(countStr) : 5));
-        break;
-      }
-
-      case 'catalog': {
-        const [, grade] = args;
-        if (!grade) {
-          output({ grades: Object.keys(SKILLS) });
-        } else {
-          output(await phonics.getSkillCatalog(grade));
-        }
-        break;
-      }
-
-      case 'students': {
-        output(await phonics.listStudents());
-        break;
-      }
-
-      case 'set-grade': {
-        const [, studentId, grade] = args;
-        if (!studentId || !grade) throw new Error('Usage: set-grade <studentId> <grade>');
-        output(await phonics.setGrade(studentId, grade));
-        break;
-      }
-
-      case 'text': {
-        const [, grade] = args;
-        if (!grade) throw new Error('Usage: text <grade>');
-        output(await phonics.getDecodableText(grade));
-        break;
-      }
-
-      default:
-        output({
-          usage: 'node phonics.js <command> [args]',
-          commands: {
-            'start <id> [grade]': 'Start or resume a student session',
-            'lesson <id>': 'Generate a full lesson with exercises',
-            'exercise <id> [skill]': 'Generate exercises (auto-picks skill if omitted)',
-            'check <id> <type> <expected> <answer>': 'Check a student answer',
-            'record <id> <grade> <cat> <skill> <score> <total>': 'Record assessment',
-            'progress <id>': 'Show student progress',
-            'report <id>': 'Full report with recent history',
-            'next <id> [count]': 'Get recommended next skills',
-            'catalog [grade]': 'List skills for a grade',
-            'students': 'List all students',
-            'set-grade <id> <grade>': 'Set student grade level',
-            'text <grade>': 'Get a decodable reading passage',
-          },
-          grades: Object.keys(SKILLS),
-        });
+      case 'progress': { const [, id] = args; if (!id) throw new Error('Usage: progress <id>'); out(ph.getProgress(id)); break; }
+      case 'report': { const [, id] = args; if (!id) throw new Error('Usage: report <id>'); out(ph.getReport(id)); break; }
+      case 'next': { const [, id, n] = args; if (!id) throw new Error('Usage: next <id> [count]'); out(ph.getNextSkills(id, n ? Number(n) : 5)); break; }
+      case 'catalog': { const [, g] = args; out(g ? ph.getSkillCatalog(g) : { grades: Object.keys(SKILLS) }); break; }
+      case 'students': { out(ph.listStudents()); break; }
+      case 'set-grade': { const [, id, g] = args; if (!id || !g) throw new Error('Usage: set-grade <id> <grade>'); out(ph.setGrade(id, g)); break; }
+      case 'text': { const [, g] = args; if (!g) throw new Error('Usage: text <grade>'); out(ph.getDecodableText(g)); break; }
+      default: out({ usage: 'node phonics.js <command> [args]', commands: ['start','lesson','exercise','check','record','progress','report','next','catalog','students','set-grade','text'], grades: Object.keys(SKILLS) });
     }
-  } catch (err) {
-    output({ error: err.message });
-    process.exit(1);
-  }
+  } catch (err) { out({ error: err.message }); process.exit(1); }
 }
-
-if (require.main === module) {
-  main();
-}
-
-module.exports = Phonics;
