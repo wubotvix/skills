@@ -236,7 +236,7 @@ const WORD_BANKS = {
         { sentence: 'I have ___ brothers.', answer: 'two', explanation: 'two = the number 2' },
         { sentence: 'Can I come ___?', answer: 'too', explanation: 'too = also' },
         { sentence: 'We walked ___ the store.', answer: 'to', explanation: 'to = direction' },
-        { sentence: 'She has ___ cats and ___ dogs.', answer: 'two, two', explanation: 'two = the number 2' },
+        { sentence: 'There are ___ apples on the table.', answer: 'two', explanation: 'two = the number 2' },
         { sentence: 'It is ___ hot outside.', answer: 'too', explanation: 'too = excessively' },
         { sentence: 'Give it ___ me.', answer: 'to', explanation: 'to = direction' },
       ],
@@ -289,7 +289,7 @@ function saveProfile(p) { ensureDataDir(); fs.writeFileSync(profilePath(p.studen
 // Helpers
 
 function calcMastery(attempts) {
-  if (!attempts.length) return 0;
+  if (!attempts || !attempts.length) return 0;
   const recent = attempts.slice(-5).filter(a => a.total > 0);
   return recent.length ? Math.round(recent.reduce((s, a) => s + a.score / a.total, 0) / recent.length * 100) / 100 : 0;
 }
