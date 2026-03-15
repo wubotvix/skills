@@ -1,0 +1,918 @@
+[
+  {
+    "name": "belarusian-conversation",
+    "description": "Belarusian conversation practice partner with ты/Вы register calibration, role-play scenarios by CEFR level, Trasianka avoidance coaching, and adaptive error correction. tutor.js is COMPLETE — all data, profiles, and session logic are embedded."
+  },
+  {
+    "name": "belarusian-grammar",
+    "description": "Belarusian grammar workshop with Socratic discovery-based teaching, SCOBAs, and FSRS spaced repetition. Covers 6 cases, verbal aspect, дзеканне/цеканне, аканне in morphology, two orthographic norms. tutor.js is COMPLETE."
+  },
+  {
+    "name": "belarusian-listening",
+    "description": "Belarusian listening comprehension lab. Trains auditory processing via dictation, minimal pairs, gap-fill, comprehension, note-taking, and language identification exercises across CEFR A1-C2. Special focus on recognizing аканне, дзеканне/цеканне, ў [w], г [ɣ], and distinguishing Belarusian from Russian and Ukrainian. tutor.js is COMPLETE."
+  },
+  {
+    "name": "belarusian-pronunciation",
+    "description": "Belarusian pronunciation coach: аканне/яканне, дзеканне/цеканне, unique ў [w], fricative г [ɣ], stress patterns, connected speech. FSRS-tracked self-grading (0-3). Intelligibility-first approach. tutor.js is COMPLETE."
+  },
+  {
+    "name": "belarusian-reading",
+    "description": "Belarusian reading comprehension tutor with leveled texts (A1-C1), vocabulary extraction, comprehension questions, and FSRS progress tracking. Covers Cyrillic decoding, аканне recognition, Łacinka awareness, two orthographic norms. tutor.js is COMPLETE."
+  },
+  {
+    "name": "belarusian-study-planner",
+    "description": "Belarusian fluency study planner and progress coach. Adaptive placement test, personalized weekly plans, FSRS-based spaced repetition across 7 skill areas. Accounts for endangered language status, limited resources, heritage goal. tutor.js is COMPLETE."
+  },
+  {
+    "name": "belarusian-vocabulary",
+    "description": "Belarusian vocabulary builder with spaced repetition. Teaches words by CEFR level with gender, collocations, Trasianka flags, aspect pairs, proverbs, and contextual exercises. FSRS scheduling. tutor.js is COMPLETE."
+  },
+  {
+    "name": "belarusian-writing",
+    "description": "Belarusian writing workshop: CEFR-leveled prompts (A1-C2), rubric-based assessment, error tracking across 9 correction categories (аканне, яканне, ў, дзеканне, цеканне, trasianka, case, aspect, punctuation). Process-genre hybrid approach. tutor.js is COMPLETE."
+  },
+  {
+    "name": "chinatechnews",
+    "description": "Fetches Chinese tech news from 36氪, 钛媒体, IT之家, 少数派 via RSS. No LLM calls, no API keys, no deps. Output in Chinese."
+  },
+  {
+    "name": "college-ela-creative-writing",
+    "description": "Interactive college creative writing tutor. creative-writing.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate creative-writing.js. Use for: fiction, poetry, creative nonfiction, craft elements, workshop prep, MFA readiness."
+  },
+  {
+    "name": "college-ela-critical-theory",
+    "description": "Interactive college critical theory tutor. critical-theory.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate critical-theory.js. Use for: literary theory, critical approaches, theorist study, textual application."
+  },
+  {
+    "name": "college-ela-linguistics",
+    "description": "Interactive college linguistics tutor. linguistics.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate linguistics.js. Use for: phonetics, phonology, morphology, syntax, semantics, pragmatics, sociolinguistics."
+  },
+  {
+    "name": "college-ela-literature",
+    "description": "Interactive college literary analysis tutor. literature.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate literature.js. Use for: close reading, literary periods, critical approaches, poetry/fiction/drama analysis."
+  },
+  {
+    "name": "college-ela-professional-writing",
+    "description": "Interactive college professional writing tutor. professional-writing.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate professional-writing.js. Use for: technical writing, business writing, grant writing, digital content, visual rhetoric."
+  },
+  {
+    "name": "college-ela-research-writing",
+    "description": "Interactive college research writing tutor. research-writing.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate research-writing.js. Use for: research questions, literature reviews, citations, academic argument, thesis writing."
+  },
+  {
+    "name": "college-ela-rhetoric-composition",
+    "description": "Interactive college rhetoric & composition tutor. rhetoric.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate rhetoric.js. Use for: rhetorical analysis, argumentation, essay writing, citation, writing process."
+  },
+  {
+    "name": "college-ela-study-planner",
+    "description": "College ELA study planner and progress coach. college-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate college-planner.js. Use for: semester planning, GRE prep, grad school readiness, skill coordination."
+  },
+  {
+    "name": "college-math-abstract-algebra",
+    "description": "Interactive abstract algebra tutor. abstract-algebra.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate abstract-algebra.js. Use for: groups, subgroups, homomorphisms, rings, ideals, fields, Galois theory."
+  },
+  {
+    "name": "college-math-calculus",
+    "description": "Interactive calculus tutor (Calc I-III). calculus.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate calculus.js. Use for: limits, derivatives, integrals, series, multivariable, vector calculus."
+  },
+  {
+    "name": "college-math-differential-equations",
+    "description": "Interactive differential equations tutor. differential-equations.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate differential-equations.js. Use for: ODEs, second-order, Laplace transforms, systems, series solutions, PDEs."
+  },
+  {
+    "name": "college-math-discrete-math",
+    "description": "Interactive discrete mathematics tutor. discrete-math.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate discrete-math.js. Use for: logic, proofs, sets, combinatorics, graph theory, number theory, algorithms."
+  },
+  {
+    "name": "college-math-linear-algebra",
+    "description": "Interactive linear algebra tutor. linear-algebra.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate linear-algebra.js. Use for: systems, matrices, vector spaces, eigenvalues, SVD, orthogonality."
+  },
+  {
+    "name": "college-math-probability-statistics",
+    "description": "Interactive probability and statistics tutor. probability-statistics.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate probability-statistics.js. Use for: probability, distributions, estimation, hypothesis testing, regression, Bayes."
+  },
+  {
+    "name": "college-math-real-analysis",
+    "description": "Interactive real analysis tutor. real-analysis.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate real-analysis.js. Use for: sequences, series, topology, continuity, differentiation, integration, metric spaces."
+  },
+  {
+    "name": "college-math-study-planner",
+    "description": "Coordinator for all college math tutoring. study-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate study-planner.js. Use for: diagnostics, study plans, progress tracking, course advising, routing to specialists."
+  },
+  {
+    "name": "college-science-biology",
+    "description": "College biology tutor. biology.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate biology.js. Use for: molecular biology, cell biology, genetics, evolution, ecology, physiology, MCAT bio."
+  },
+  {
+    "name": "college-science-chemistry",
+    "description": "College chemistry tutor. chemistry.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate chemistry.js. Use for: atomic theory, bonding, thermodynamics, kinetics, equilibrium, electrochemistry, organic, spectroscopy."
+  },
+  {
+    "name": "college-science-earth-space",
+    "description": "Earth and space sciences tutor. earth-space.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate earth-space.js. Use for: geology, mineralogy, atmospheric science, oceanography, planetary science, environmental science, geophysics."
+  },
+  {
+    "name": "college-science-engineering",
+    "description": "Engineering fundamentals tutor. engineering.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate engineering.js. Use for: statics, dynamics, thermodynamics, fluid mechanics, materials science, circuits, systems design, FE exam."
+  },
+  {
+    "name": "college-science-interdisciplinary",
+    "description": "Interdisciplinary science tutor. interdisciplinary.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate interdisciplinary.js. Use for: biophysics, biochemistry, environmental engineering, computational science, science policy, science communication."
+  },
+  {
+    "name": "college-science-physics",
+    "description": "University physics tutor. physics.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate physics.js. Use for: mechanics, thermodynamics, E&M, optics, waves, modern physics, quantum, relativity."
+  },
+  {
+    "name": "college-science-research-methods",
+    "description": "Research methods tutor. research-methods.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate research-methods.js. Use for: experimental design, statistics, scientific writing, literature review, data visualization, ethics, peer review."
+  },
+  {
+    "name": "college-science-study-planner",
+    "description": "College science study planner and coordinator. study-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate study-planner.js. Use for: study planning, diagnostics, progress tracking, goal setting, exam prep scheduling."
+  },
+  {
+    "name": "college-socialstudies-anthropology",
+    "description": "College anthropology tutor. anthropology.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate anthropology.js. Use for: cultural anthropology, biological anthropology, archaeology, linguistic anthropology, ethnography, applied anthropology."
+  },
+  {
+    "name": "college-socialstudies-economics",
+    "description": "College economics tutor. economics.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate economics.js. Use for: microeconomics, macroeconomics, econometrics, game theory, behavioral economics, development economics, international economics."
+  },
+  {
+    "name": "college-socialstudies-history",
+    "description": "College history tutor. history.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate history.js. Use for: historiography, primary sources, thematic history, comparative history, oral history, digital humanities."
+  },
+  {
+    "name": "college-socialstudies-philosophy",
+    "description": "College philosophy tutor. philosophy.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate philosophy.js. Use for: epistemology, metaphysics, ethics, formal logic, political philosophy, philosophy of mind, aesthetics."
+  },
+  {
+    "name": "college-socialstudies-political-science",
+    "description": "College political science tutor. political-science.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate political-science.js. Use for: political theory, comparative politics, international relations, public policy, political methodology, American politics."
+  },
+  {
+    "name": "college-socialstudies-psychology",
+    "description": "College psychology tutor. psychology.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate psychology.js. Use for: cognitive psychology, developmental psychology, social psychology, abnormal psychology, research methods, neuroscience intro, behavioral psychology."
+  },
+  {
+    "name": "college-socialstudies-sociology",
+    "description": "College sociology tutor. sociology.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate sociology.js. Use for: social theory, social stratification, race-ethnicity, gender-sexuality, institutions, globalization, research methods."
+  },
+  {
+    "name": "college-socialstudies-study-planner",
+    "description": "College social studies coordinator. study-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate study-planner.js. Use for: coordinating all college social studies skills, diagnostics, study plans, progress tracking, goal setting."
+  },
+  {
+    "name": "ela-grammar",
+    "description": "Interactive grammar & conventions tutor (K-6). grammar.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate grammar.js. Use for: parts of speech, sentence structure, punctuation, capitalization, verb tenses, sentence combining."
+  },
+  {
+    "name": "ela-phonics",
+    "description": "Interactive phonics tutor (K-3). phonics.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate phonics.js. Use for: sounding out words, reading fluency, phonics practice, letter sounds, decoding."
+  },
+  {
+    "name": "ela-reading-informational",
+    "description": "Elementary informational text reading tutor (K-6) teaching comprehension of nonfiction including main idea, text features, text structure, evidence evaluation, and critical reading. Aligned with Common Core RI standards. Use when the learner wants to \"read nonfiction\", \"find the main idea\", \"use text features\", \"read an article\", or improve informational comprehension."
+  },
+  {
+    "name": "ela-reading-literature",
+    "description": "Elementary reading literature tutor (K-6) teaching comprehension of fiction, poetry, and drama. Covers story elements, theme, character analysis, point of view, figurative language, text structure, and comparing texts. Aligned with Common Core RL standards. Use when the learner wants to understand a story, analyze a character, find the theme, read poetry, or improve literary comprehension."
+  },
+  {
+    "name": "ela-speaking-listening",
+    "description": "Elementary speaking and listening tutor (K-6) teaching collaborative discussion, oral presentation, active listening, accountable talk, and media literacy. Aligned with Common Core SL standards. Use when the learner wants to practice speaking, discussion, presentation, or listening skills."
+  },
+  {
+    "name": "ela-study-planner",
+    "description": "ELA study planner & progress coach (K-6). study-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate study-planner.js. Use for: plan my ELA week, what should I read, my reading level, take assessment, track progress."
+  },
+  {
+    "name": "ela-vocabulary",
+    "description": "Interactive vocabulary tutor (K-6). vocabulary.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate vocabulary.js. Use for: vocabulary building, word meanings, spelling, context clues, word parts, homophones."
+  },
+  {
+    "name": "ela-writing",
+    "description": "Interactive writing tutor (K-6). writing.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate writing.js. Use for: writing practice, narrative/informational/opinion writing, revision, editing, writing prompts, show don't tell, strong leads, sentence variety."
+  },
+  {
+    "name": "english-conversation",
+    "description": "Interactive English conversation practice (A1-C2). conversation.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate conversation.js. Use for: speaking practice, functional language, pragmatics, discussion, role-play."
+  },
+  {
+    "name": "english-grammar",
+    "description": "Interactive English grammar tutor (A1-C2). grammar.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate grammar.js. Use for: grammar practice, tenses, articles, conditionals, passive voice, reported speech."
+  },
+  {
+    "name": "english-listening",
+    "description": "Interactive English listening comprehension lab (A1-C2). listening.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate listening.js. Use for: listening practice, dictation, comprehension, connected speech, note-taking."
+  },
+  {
+    "name": "english-pronunciation",
+    "description": "Interactive English pronunciation lab (A1-C2). pronunciation.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate pronunciation.js. Use for: pronunciation practice, minimal pairs, stress patterns, intonation, connected speech."
+  },
+  {
+    "name": "english-reading",
+    "description": "Interactive English reading workshop (A1-C2). reading.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate reading.js. Use for: reading comprehension, strategies, vocabulary from context, speed reading."
+  },
+  {
+    "name": "english-study-planner",
+    "description": "English fluency study planner and progress coach (A1-C2). planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate planner.js. Use for: placement testing, study plans, progress tracking, skill coordination."
+  },
+  {
+    "name": "english-vocabulary",
+    "description": "Interactive English vocabulary builder (A1-C2). vocabulary.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate vocabulary.js. Use for: vocabulary practice, word learning, collocations, word formation, phrasal verbs."
+  },
+  {
+    "name": "english-writing",
+    "description": "Interactive English writing workshop (A1-C2). writing.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate writing.js. Use for: writing practice, genre instruction, essay structure, coherence, register."
+  },
+  {
+    "name": "filipino-conversation",
+    "description": "Filipino conversation practice partner with register calibration (po/opo, Taglish awareness), role-play scenarios by CEFR level, and adaptive error correction. tutor.js is COMPLETE — all data, profiles, and session logic are embedded."
+  },
+  {
+    "name": "filipino-grammar",
+    "description": "Filipino grammar workshop with Socratic discovery-based teaching, Processing Instruction, Concept-Based Instruction (SCOBAs), and FSRS spaced repetition. tutor.js is COMPLETE — all grammar data, exercises, SCOBAs, profiles, and CLI are embedded. Covers verb focus system, aspects, case markers, linkers, and more across CEFR A1-C2."
+  },
+  {
+    "name": "filipino-listening",
+    "description": "Filipino listening comprehension lab. Trains auditory processing via dictation, stress discrimination, gap-fill, comprehension, and note-taking exercises across CEFR A1-C2. Covers connected speech, Filipino reductions, Taglish, and regional features. JS implementation is complete."
+  },
+  {
+    "name": "filipino-pronunciation",
+    "description": "Filipino pronunciation coach: 5-vowel system, glottal stop, word-initial /ng/, phonemic stress patterns, connected speech, intonation. FSRS-tracked self-grading (0-3). Intelligibility-first approach. JS implementation is complete."
+  },
+  {
+    "name": "filipino-reading",
+    "description": "Filipino reading comprehension tutor with leveled texts (A1-C1), vocabulary extraction, comprehension questions, and progress tracking. JS implementation is complete."
+  },
+  {
+    "name": "filipino-study-planner",
+    "description": "Filipino fluency study planner and progress coach. Adaptive placement test, personalized weekly plans, FSRS-based spaced repetition across 7 skill areas. Includes heritage learner mode. Trigger: \"plan my week\", \"what should I study\", \"my progress\", \"take placement test\"."
+  },
+  {
+    "name": "filipino-vocabulary",
+    "description": "Filipino vocabulary builder with spaced repetition. Implementation in tutor.js is COMPLETE. Teaches words by CEFR level with roots, affixes, collocations, Spanish loanwords, idioms (sawikain), and proverbs (salawikain). Contextual exercises with FSRS scheduling."
+  },
+  {
+    "name": "filipino-writing",
+    "description": "Filipino writing workshop: CEFR-leveled prompts (A1-C2), rubric-based assessment, error tracking across 9 correction categories, spaced review of weak areas. Process-genre hybrid approach. JS is complete."
+  },
+  {
+    "name": "french-conversation",
+    "description": "French conversation practice partner with register calibration (tu/vous), role-play scenarios by CEFR level, regional variants, and adaptive error correction. tutor.js is COMPLETE — all data, profiles, and session logic are embedded."
+  },
+  {
+    "name": "french-grammar",
+    "description": "French grammar workshop with Socratic discovery-based teaching, Processing Instruction, Concept-Based Instruction (SCOBAs), and FSRS spaced repetition. tutor.js is COMPLETE — all grammar data, exercises, SCOBAs, profiles, and CLI are embedded. Covers passe compose/imparfait, subjunctive, articles, pronouns, conditionals, and more across CEFR A1-C2."
+  },
+  {
+    "name": "french-listening",
+    "description": "French listening comprehension lab. Trains auditory processing via dictation, minimal pairs, gap-fill, comprehension, and note-taking exercises across CEFR A1-C2. Covers liaison, enchainement, ne-dropping, and regional accents. JS implementation is complete."
+  },
+  {
+    "name": "french-pronunciation",
+    "description": "French pronunciation coach: nasal vowels, /y/, /ʁ/, liaison, enchaînement, e muet, rhythm, intonation, regional variation. FSRS-tracked self-grading (0-3). Intelligibility-first approach across all French varieties."
+  },
+  {
+    "name": "french-reading",
+    "description": "French reading comprehension tutor with leveled texts (A1-C1), vocabulary extraction, comprehension questions, and progress tracking. JS implementation is complete."
+  },
+  {
+    "name": "french-study-planner",
+    "description": "French fluency study planner and progress coach. Adaptive placement test, personalized weekly plans, FSRS-based spaced repetition across 7 skill areas. Includes DELF/DALF, TCF, TEF exam prep. Trigger: \"plan my week\", \"what should I study\", \"my progress\", \"take placement test\"."
+  },
+  {
+    "name": "french-vocabulary",
+    "description": "French vocabulary builder with spaced repetition. Implementation in tutor.js is COMPLETE. Teaches words by CEFR level with gender/articles, collocations, false friends, and contextual exercises. Use when the learner wants to \"learn new words\", \"practice vocabulary\", \"study collocations\", or build French word knowledge."
+  },
+  {
+    "name": "french-writing",
+    "description": "French writing workshop: CEFR-leveled prompts (A1-C2), rubric-based assessment, error tracking across 8 correction categories, spaced review of weak areas. Process-genre hybrid approach."
+  },
+  {
+    "name": "german-conversation",
+    "description": "German conversation practice partner with register calibration (du/Sie), role-play scenarios by CEFR level, regional variants (Germany/Austria/Switzerland), modal particles, and adaptive error correction. tutor.js is COMPLETE — all data, profiles, and session logic are embedded."
+  },
+  {
+    "name": "german-grammar",
+    "description": "German grammar workshop with Socratic discovery-based teaching, Processing Instruction, Concept-Based Instruction (SCOBAs), and FSRS spaced repetition. tutor.js is COMPLETE — all grammar data, exercises, SCOBAs, profiles, and CLI are embedded. Covers cases, articles, V2 word order, separable verbs, Konjunktiv II, passive, adjective declension, and more across CEFR A1-C2."
+  },
+  {
+    "name": "german-listening",
+    "description": "German listening comprehension lab with text-based exercises: dictation, minimal pairs, gap-fill, comprehension, and note-taking. FSRS-tracked. tutor.js is COMPLETE — all exercise data, profiles, and CLI are embedded."
+  },
+  {
+    "name": "german-pronunciation",
+    "description": "German pronunciation coach: vowel length contrasts, umlauts (ü/ö/ä), ch-sounds (ich/ach), final devoicing, glottal stop, R-sounds, stress patterns, connected speech. FSRS-tracked self-grading (0-3). Intelligibility-first approach."
+  },
+  {
+    "name": "german-reading",
+    "description": "German reading comprehension workshop with CEFR-graded texts, vocabulary support, and comprehension questions. FSRS-tracked. tutor.js is COMPLETE — all texts, questions, profiles, and CLI are embedded."
+  },
+  {
+    "name": "german-study-planner",
+    "description": "German fluency study planner and progress coach. Adaptive placement test, personalized weekly plans, FSRS-based spaced repetition across 7 skill areas. Includes Goethe-Zertifikat, TestDaF, and telc exam prep. Trigger: \"plan my week\", \"what should I study\", \"my progress\", \"take placement test\"."
+  },
+  {
+    "name": "german-vocabulary",
+    "description": "German vocabulary builder with spaced repetition. Implementation in tutor.js is COMPLETE. Teaches words by CEFR level with gender (der/die/das), compound nouns, collocations, false friends, and contextual exercises. Use when the learner wants to \"learn new words\", \"practice vocabulary\", \"study collocations\", or build German word knowledge."
+  },
+  {
+    "name": "german-writing",
+    "description": "German writing workshop with process-genre approach (Planen, Entwerfen, Ueberarbeiten, Feilen), CEFR-graded prompts, and structured feedback. FSRS-tracked. tutor.js is COMPLETE — all prompts, correction categories, profiles, and CLI are embedded."
+  },
+  {
+    "name": "hs-ela-grammar-language",
+    "description": "High school grammar, language & style tutor (grades 9-12). Teaches grammar as rhetorical craft — syntax, punctuation, voice, schemes, imitation, register, and dialect awareness. Aligned with Common Core L.9-12."
+  },
+  {
+    "name": "hs-ela-informational",
+    "description": "High school informational text and rhetoric tutor (grades 9-12). Teaches rhetorical analysis, argument evaluation, seminal US documents, SOAPSTone, and source synthesis. Aligned with Common Core RI.9-12 and AP Language. Use when the learner wants to analyze rhetoric, evaluate arguments, study speeches, identify fallacies, or prepare for AP Language."
+  },
+  {
+    "name": "hs-ela-literature",
+    "description": "High school literature analysis tutor (grades 9-12) covering close reading, literary criticism, figurative language, text structure, and analysis of fiction, poetry, drama, and nonfiction. Aligned with Common Core RL.9-12. Use when the learner wants to \"analyze literature\", \"close read\", \"study literary devices\", or \"practice literary analysis\"."
+  },
+  {
+    "name": "hs-ela-research-media",
+    "description": "High school research and media literacy tutor (grades 9-12) covering research process, source evaluation, MLA/APA citation, synthesis, annotated bibliography, research paper writing, and media/digital literacy. Aligned with CCSS W.9-12.7-9 and ACRL Framework. Use for \"research paper\", \"evaluate sources\", \"cite MLA/APA\", \"synthesize sources\", \"analyze media bias\", or college-level research skills."
+  },
+  {
+    "name": "hs-ela-speaking-listening",
+    "description": "High school speaking and listening tutor (grades 9-12) teaching formal debate, Socratic seminar, presentations, rhetorical delivery, active listening, and argument evaluation. Aligned with Common Core SL.9-12."
+  },
+  {
+    "name": "hs-ela-study-planner",
+    "description": "HS ELA study planner and progress coach (grades 9-12). study-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate study-planner.js. Use for: weekly plans, progress tracking, reading logs, book recs, AP prep, goal setting."
+  },
+  {
+    "name": "hs-ela-vocabulary",
+    "description": "High school vocabulary tutor (grades 9-12) teaching SAT/ACT vocabulary, morphological analysis, etymology, academic vocabulary, connotation/register, and vocabulary in context. Aligned with Common Core L.9-12.4-6. Use for \"build vocabulary\", \"SAT/ACT prep\", \"word roots\", \"academic words\", or advanced word knowledge."
+  },
+  {
+    "name": "hs-ela-writing",
+    "description": "High school writing tutor (grades 9-12) covering argumentative, rhetorical analysis, synthesis, literary analysis, personal/college essays, and research papers. Aligned with Common Core W.9-12 and AP English frameworks. Use when the learner wants to write essays, develop thesis statements, integrate evidence, improve style, or prepare for AP English exams."
+  },
+  {
+    "name": "hs-math-algebra",
+    "description": "Interactive Algebra 1 & 2 tutor (grades 9-11). algebra.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate algebra.js. Use for: solving equations, factoring, quadratics, systems, logarithms, polynomials."
+  },
+  {
+    "name": "hs-math-functions",
+    "description": "Interactive Functions tutor (grades 9-12). functions.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate functions.js. Use for: function families, transformations, composition, inverses, domain/range, modeling."
+  },
+  {
+    "name": "hs-math-geometry",
+    "description": "Interactive Geometry tutor (grades 9-10). geometry.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate geometry.js. Use for: proofs, congruence, similarity, circles, area, volume, transformations, coordinate geometry."
+  },
+  {
+    "name": "hs-math-precalculus",
+    "description": "Interactive Precalculus tutor (grades 11-12). precalculus.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate precalculus.js. Use for: advanced functions, conics, sequences/series, limits, polar/parametric, calculus readiness."
+  },
+  {
+    "name": "hs-math-problem-solving",
+    "description": "Interactive Problem Solving & Reasoning tutor (grades 9-12). problem-solving.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate problem-solving.js. Use for: proofs, logical reasoning, competition prep (AMC/AIME), modeling, multi-step problems."
+  },
+  {
+    "name": "hs-math-statistics",
+    "description": "Interactive Statistics & Probability tutor (grades 9-12). statistics.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate statistics.js. Use for: data analysis, distributions, probability, normal distribution, regression, inference."
+  },
+  {
+    "name": "hs-math-study-planner",
+    "description": "Interactive Math Study Planner & Coach (grades 9-12). study-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate study-planner.js. Use for: study plans, progress tracking, SAT/ACT readiness, course planning, math anxiety support."
+  },
+  {
+    "name": "hs-math-trigonometry",
+    "description": "Interactive Trigonometry tutor (grades 10-12). trigonometry.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate trigonometry.js. Use for: unit circle, trig functions, identities, equations, law of sines/cosines, graphing."
+  },
+  {
+    "name": "hs-science-biology",
+    "description": "Interactive biology tutor (9-12). biology.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate biology.js. Use for: cells, DNA, genetics, evolution, ecology, body systems, biotechnology, classification."
+  },
+  {
+    "name": "hs-science-chemistry",
+    "description": "Interactive chemistry tutor (10-12). chemistry.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate chemistry.js. Use for: atoms, periodic table, bonding, reactions, stoichiometry, gases, solutions, acids/bases, thermo."
+  },
+  {
+    "name": "hs-science-earth-space",
+    "description": "Interactive earth & space science tutor (9-12). earth-space.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate earth-space.js. Use for: geology, plate tectonics, minerals, atmosphere, oceans, climate, astronomy, space, hazards."
+  },
+  {
+    "name": "hs-science-engineering",
+    "description": "Interactive engineering design tutor (9-12). engineering.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate engineering.js. Use for: design process, materials, structures, energy systems, computational modeling, ethics."
+  },
+  {
+    "name": "hs-science-inquiry",
+    "description": "Interactive scientific inquiry tutor (9-12). inquiry.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate inquiry.js. Use for: experimental design, data analysis, statistics, modeling, lab techniques, research writing."
+  },
+  {
+    "name": "hs-science-physics",
+    "description": "Interactive physics tutor (11-12). physics.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate physics.js. Use for: kinematics, forces, energy, momentum, circular motion, waves, optics, electricity, magnetism."
+  },
+  {
+    "name": "hs-science-reasoning",
+    "description": "Interactive scientific reasoning tutor (9-12). reasoning.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate reasoning.js. Use for: argumentation, evidence evaluation, critical analysis, quantitative reasoning, systems, ethics."
+  },
+  {
+    "name": "hs-science-study-planner",
+    "description": "Interactive science study planner (9-12). study-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate study-planner.js. Use for: study plans, diagnostics, progress tracking, AP prep, goals, recommendations."
+  },
+  {
+    "name": "hs-socialstudies-current-events",
+    "description": "Interactive Current Events tutor (9-12). current-events.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate current-events.js. Use for: news analysis, media literacy, domestic/foreign policy, global issues, civic participation."
+  },
+  {
+    "name": "hs-socialstudies-economics",
+    "description": "Interactive Economics tutor (11-12). economics.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate economics.js. Use for: AP Micro/Macro, supply/demand, market structures, fiscal/monetary policy, trade."
+  },
+  {
+    "name": "hs-socialstudies-geography",
+    "description": "Interactive Geography tutor (9-12). geography.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate geography.js. Use for: AP Human Geography, spatial thinking, population, culture, political geography, urbanization."
+  },
+  {
+    "name": "hs-socialstudies-government",
+    "description": "Interactive Government tutor (11-12). government.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate government.js. Use for: AP Gov, Constitution, Supreme Court, civil liberties, elections, political parties."
+  },
+  {
+    "name": "hs-socialstudies-inquiry",
+    "description": "Interactive Social Studies Inquiry tutor (9-12). inquiry.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate inquiry.js. Use for: historical analysis, source evaluation, argumentation, research, DBQ/LEQ/SAQ writing."
+  },
+  {
+    "name": "hs-socialstudies-study-planner",
+    "description": "HS Social Studies Study Planner (9-12). study-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate study-planner.js. Use for: study planning, AP prep, progress tracking, goal setting, coordinating all HS social studies."
+  },
+  {
+    "name": "hs-socialstudies-us-history",
+    "description": "Interactive US History tutor (10-11). us-history.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate us-history.js. Use for: APUSH, American history, colonial era, Revolution, Civil War, civil rights, Cold War."
+  },
+  {
+    "name": "hs-socialstudies-world-history",
+    "description": "Interactive World History tutor (9-10). world-history.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate world-history.js. Use for: AP World History, civilizations, trade networks, empires, revolutions, globalization."
+  },
+  {
+    "name": "italian-conversation",
+    "description": "Italian conversation practice partner with register calibration (tu/Lei/Voi), role-play scenarios by CEFR level, regional variants, and adaptive error correction. tutor.js is COMPLETE — all data, profiles, and session logic are embedded."
+  },
+  {
+    "name": "italian-grammar",
+    "description": "Italian grammar workshop with Socratic discovery-based teaching, Processing Instruction, Concept-Based Instruction (SCOBAs), and FSRS spaced repetition. tutor.js is COMPLETE — all grammar data, exercises, SCOBAs, profiles, and CLI are embedded. Covers articles, preposizioni articolate, congiuntivo, passato prossimo/imperfetto/remoto, periodo ipotetico, and more across CEFR A1-C2."
+  },
+  {
+    "name": "italian-listening",
+    "description": "Italian listening comprehension lab. Trains auditory processing via dictation, geminate minimal pairs, gap-fill, comprehension, and note-taking exercises across CEFR A1-C2. Covers geminate consonants, regional accents, raddoppiamento sintattico, H-word homophones, and informal speech reductions. JS complete."
+  },
+  {
+    "name": "italian-pronunciation",
+    "description": "Italian pronunciation coach: 7-vowel system, geminate consonants, stress patterns, trill /r/, spelling-to-sound rules (c/g, sc, gn, gli, z), intonation, regional variation. FSRS-tracked self-grading (0-3). Intelligibility-first approach."
+  },
+  {
+    "name": "italian-reading",
+    "description": "Italian reading comprehension tutor with leveled texts (A1-C1), vocabulary extraction, comprehension questions, and progress tracking. JS implementation is complete."
+  },
+  {
+    "name": "italian-study-planner",
+    "description": "Italian fluency study planner and progress coach. Adaptive placement test, personalized weekly plans, FSRS-based spaced repetition across 7 skill areas. Includes CILS/CELI/PLIDA exam prep. Trigger: \"pianifica la mia settimana\", \"what should I study\", \"i miei progressi\", \"test di piazzamento\"."
+  },
+  {
+    "name": "italian-vocabulary",
+    "description": "Italian vocabulary builder with spaced repetition. Implementation in tutor.js is COMPLETE. Teaches words by CEFR level with gender/articles (il/lo/la/l'/i/gli/le), collocations, falsi amici, and contextual exercises. Use when the learner wants to \"imparare parole nuove\", \"practice vocabulary\", or build Italian word knowledge."
+  },
+  {
+    "name": "italian-writing",
+    "description": "Italian writing workshop: CEFR-leveled prompts (A1-C2), rubric-based assessment, error tracking across 8 correction categories, spaced review of weak areas. Process-genre hybrid approach. Covers Italian accent system, double consonants, formal letter conventions, agreement rules."
+  },
+  {
+    "name": "math-fractions",
+    "description": "Interactive fractions tutor (K-6). fractions.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate fractions.js. Use for: fractions, equivalent fractions, comparing fractions, fraction operations, decimals, percentages, number lines, mixed numbers."
+  },
+  {
+    "name": "math-geometry",
+    "description": "Interactive geometry tutor (K-6). geometry.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate geometry.js. Use for: shapes, area, perimeter, volume, angles, symmetry, coordinates, spatial reasoning."
+  },
+  {
+    "name": "math-measurement-data",
+    "description": "Interactive measurement & data tutor (K-6). measurement-data.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate measurement-data.js. Use for: measuring, unit conversions, telling time, money, graphs, data analysis, statistics."
+  },
+  {
+    "name": "math-number-sense",
+    "description": "Interactive number sense tutor (K-6). number-sense.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate number-sense.js. Use for: counting, place value, comparison, estimation, rounding, number bonds."
+  },
+  {
+    "name": "math-operations",
+    "description": "Interactive arithmetic operations tutor (K-6). operations.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate operations.js. Use for: addition, subtraction, multiplication, division, order of operations, math facts, computational fluency."
+  },
+  {
+    "name": "math-patterns-algebra",
+    "description": "Interactive patterns & algebraic thinking tutor (K-6). patterns-algebra.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate patterns-algebra.js. Use for: finding patterns, pre-algebra, solving equations, variables, expressions, algebraic reasoning."
+  },
+  {
+    "name": "math-study-planner",
+    "description": "Math study planner and progress coordinator (K-6). study-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate study-planner.js. Use for: math assessment, study plans, progress tracking, recommendations, math goals."
+  },
+  {
+    "name": "math-word-problems",
+    "description": "Interactive word problem coach (K-6). word-problems.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate word-problems.js. Use for: word problems, story problems, problem solving, bar models, multi-step problems."
+  },
+  {
+    "name": "ms-ela-grammar-language",
+    "description": "Middle school grammar and language conventions tutor (grades 6-8). Covers pronoun case, intensive/vague pronouns, sentence patterns/variety, nonrestrictive punctuation, style-tone, phrases-clauses, sentence types, misplaced modifiers, coordinate adjective commas, precise language, wordiness, verbals, active/passive voice, verb mood, ellipsis-dash, advanced sentence combining, and formal/informal register. Aligned with Common Core L.6-8.1-3."
+  },
+  {
+    "name": "ms-ela-reading-informational",
+    "description": "Middle school reading informational text tutor (grades 6-8) teaching close reading of nonfiction, analyzing arguments, evaluating evidence and reasoning, comparing texts, text structure analysis, and determining author's purpose and point of view. Aligned with Common Core RI.6-8. Use when the learner wants to \"analyze nonfiction\", \"evaluate an argument\", \"identify text structure\", \"determine author's purpose\", \"compare sources\", or improve informational reading skills."
+  },
+  {
+    "name": "ms-ela-reading-literature",
+    "description": "Middle school reading literature tutor (grades 6-8). reading-literature.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate reading-literature.js. Use for: citing evidence, theme analysis, character development, figurative language, text structure, point of view, media comparison, genre comparison, sound devices, dramatic irony, pacing, diction/tone."
+  },
+  {
+    "name": "ms-ela-research-media",
+    "description": "Middle school research and media literacy tutor (grades 6-8) teaching the research process, evaluating sources, synthesizing information, MLA citation basics, avoiding plagiarism, digital literacy, and media analysis. Aligned with Common Core W.6-8.7-9 and SL.6-8.2. Use when the learner wants to \"do a research project\", \"find reliable sources\", \"cite sources\", \"avoid plagiarism\", \"analyze media\", or develop research skills."
+  },
+  {
+    "name": "ms-ela-speaking-listening",
+    "description": "Middle school speaking and listening tutor (grades 6-8) teaching collaborative discussion, presentations, active listening, evaluating speakers, adapting speech, and multimedia presentations. Aligned with Common Core SL.6-8. Use when the learner wants to \"prepare a presentation\", \"practice discussion\", \"debate\", \"improve public speaking\", \"learn to listen better\", or develop speaking and listening skills."
+  },
+  {
+    "name": "ms-ela-study-planner",
+    "description": "Middle school ELA study planner and progress coach (grades 6-8). Generates personalized weekly plans across 7 skill areas, tracks reading logs and Lexile levels, recommends books, and aggregates progress from all ms-ela-* skills. Use when the learner says \"plan my ELA week\", \"what should I read\", \"show my progress\", or wants to organize their middle school ELA learning."
+  },
+  {
+    "name": "ms-ela-vocabulary",
+    "description": "Middle school vocabulary tutor (grades 6-8) teaching context clues, Greek/Latin roots, figurative language, connotation/denotation, word relationships, and academic vocabulary. Aligned with Common Core L.6-8.4-6. Use when the learner wants to learn new words, understand word parts, figure out word meaning, study vocabulary, or improve word knowledge at the middle school level."
+  },
+  {
+    "name": "ms-ela-writing",
+    "description": "Middle school writing tutor (grades 6-8) teaching argumentative, informational, and narrative writing plus the writing process and revision. Covers thesis development, evidence integration, counterargument, transitions, dialogue, pacing, sensory language, and writing craft. Aligned with Common Core W.6-8. Use when the learner wants to write essays, arguments, stories, or improve writing skills at the middle school level."
+  },
+  {
+    "name": "ms-math-expressions-equations",
+    "description": "Interactive expressions and equations tutor (grades 6-8). expressions-equations.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate expressions-equations.js. Use for: algebraic expressions, equation solving, inequalities, exponents, systems of equations."
+  },
+  {
+    "name": "ms-math-functions",
+    "description": "Interactive functions tutor (grade 8). functions.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate functions.js. Use for: functions, linear functions, slope, y-intercept, comparing functions, nonlinear functions."
+  },
+  {
+    "name": "ms-math-geometry",
+    "description": "Interactive geometry tutor (grades 6-8). geometry.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate geometry.js. Use for: area, surface area, volume, angles, circles, transformations, Pythagorean theorem."
+  },
+  {
+    "name": "ms-math-number-system",
+    "description": "Interactive number system tutor (grades 6-8). number-system.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate number-system.js. Use for: integers, rational numbers, irrational numbers, absolute value, scientific notation."
+  },
+  {
+    "name": "ms-math-problem-solving",
+    "description": "Interactive problem solving tutor (grades 6-8). problem-solving.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate problem-solving.js. Use for: word problems, multi-step problems, mathematical reasoning, modeling, competition prep."
+  },
+  {
+    "name": "ms-math-ratios-proportions",
+    "description": "Interactive ratios and proportions tutor (grades 6-8). ratios-proportions.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate ratios-proportions.js. Use for: ratios, unit rates, percents, proportional relationships, constant of proportionality, slope."
+  },
+  {
+    "name": "ms-math-statistics-probability",
+    "description": "Interactive statistics and probability tutor (grades 6-8). statistics-probability.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate statistics-probability.js. Use for: mean, median, data displays, probability, sampling, scatter plots, two-way tables."
+  },
+  {
+    "name": "ms-math-study-planner",
+    "description": "Interactive math study planner and coordinator (grades 6-8). study-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate study-planner.js. Use for: study plans, progress tracking, diagnostics, algebra readiness, math anxiety support."
+  },
+  {
+    "name": "ms-science-earth-space",
+    "description": "Middle school earth and space science tutor (grades 6-8). earth-space.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate earth-space.js. Use for: plate tectonics, earthquakes, volcanoes, weather, climate, rocks, fossils, space, human impact."
+  },
+  {
+    "name": "ms-science-engineering",
+    "description": "Middle school engineering design tutor (grades 6-8). engineering.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate engineering.js. Use for: engineering design process, criteria and constraints, trade-offs, prototyping, optimization, STEM projects."
+  },
+  {
+    "name": "ms-science-inquiry",
+    "description": "Middle school scientific inquiry tutor (grades 6-8). inquiry.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate inquiry.js. Use for: experimental design, variables, hypothesis, data analysis, graphing, lab safety, fair testing."
+  },
+  {
+    "name": "ms-science-life",
+    "description": "Middle school life science tutor (grades 6-8). life-science.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate life-science.js. Use for: cells, body systems, genetics, evolution, ecosystems, photosynthesis, heredity."
+  },
+  {
+    "name": "ms-science-literacy",
+    "description": "Middle school science literacy tutor (grades 6-8). literacy.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate literacy.js. Use for: reading science texts, interpreting data, evaluating claims, writing lab reports, scientific vocabulary, communication."
+  },
+  {
+    "name": "ms-science-physical",
+    "description": "Middle school physical science tutor (grades 6-8). physical-science.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate physical-science.js. Use for: atoms, matter, chemical reactions, forces, motion, energy, waves, particle model."
+  },
+  {
+    "name": "ms-science-reasoning",
+    "description": "Middle school scientific reasoning tutor (grades 6-8). reasoning.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate reasoning.js. Use for: crosscutting concepts, CER arguments, systems thinking, cause and effect, models, scientific explanation."
+  },
+  {
+    "name": "ms-science-study-planner",
+    "description": "Middle school science study planner (grades 6-8). study-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate study-planner.js. Use for: study plans, progress tracking, science assessment, goal setting, coordinating all MS science skills."
+  },
+  {
+    "name": "ms-socialstudies-civics",
+    "description": "Middle school civics tutor (grades 6-8). civics.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate civics.js. Use for: government, Constitution, rights, citizenship, elections, law, Supreme Court."
+  },
+  {
+    "name": "ms-socialstudies-current-events",
+    "description": "Middle school current events and media literacy tutor (grades 6-8). current-events.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate current-events.js. Use for: news analysis, media literacy, bias detection, misinformation, civic engagement, perspective-taking."
+  },
+  {
+    "name": "ms-socialstudies-economics",
+    "description": "Middle school economics tutor (grades 6-8). economics.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate economics.js. Use for: economic systems, supply/demand, money/banking, trade, personal finance, government role."
+  },
+  {
+    "name": "ms-socialstudies-geography",
+    "description": "Middle school geography tutor (grades 6-8). geography.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate geography.js. Use for: map skills, physical geography, human geography, regions, migration, environment."
+  },
+  {
+    "name": "ms-socialstudies-inquiry",
+    "description": "Middle school inquiry and evidence tutor (grades 6-8). inquiry.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate inquiry.js. Use for: compelling questions, source analysis, DBQs, evidence evaluation, argument writing, C3 Inquiry Arc."
+  },
+  {
+    "name": "ms-socialstudies-study-planner",
+    "description": "Middle school social studies study planner (grades 6-8). study-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate study-planner.js. Use for: study planning, diagnostics, progress tracking, goal setting, recommendations."
+  },
+  {
+    "name": "ms-socialstudies-us-history",
+    "description": "Middle school US history tutor (grades 6-8). us-history.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate us-history.js. Use for: colonial era, Revolution, Constitution, expansion, Civil War, Reconstruction, modern America."
+  },
+  {
+    "name": "ms-socialstudies-world-history",
+    "description": "Middle school world history tutor (grades 6-8). world-history.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate world-history.js. Use for: ancient civilizations, classical empires, medieval world, exploration, revolutions, modern issues."
+  },
+  {
+    "name": "polish-conversation",
+    "description": "Polish conversation practice partner with register calibration (ty/Pan/Pani/Państwo), role-play scenarios by CEFR level, and adaptive error correction. tutor.js is COMPLETE — all data, profiles, and session logic are embedded."
+  },
+  {
+    "name": "polish-grammar",
+    "description": "Polish grammar workshop with Socratic discovery-based teaching, Processing Instruction, SCOBAs, and FSRS spaced repetition. Covers 7-case system, verb aspect, gender agreement, conditionals, and more across CEFR A1-C2. tutor.js is COMPLETE — all grammar data, exercises, SCOBAs, profiles, and CLI are embedded."
+  },
+  {
+    "name": "polish-listening",
+    "description": "Polish listening comprehension lab. Trains auditory processing via dictation, sibilant discrimination, gap-fill, comprehension, and note-taking exercises across CEFR A1-C2. Covers connected speech, case ending recognition, and aspect discrimination. tutor.js is COMPLETE."
+  },
+  {
+    "name": "polish-pronunciation",
+    "description": "Polish pronunciation coach: three-way sibilant contrasts, consonant clusters, nasal vowels, penultimate stress, voicing rules. FSRS-tracked self-grading (0-3). Intelligibility-first approach. tutor.js is COMPLETE."
+  },
+  {
+    "name": "polish-reading",
+    "description": "Polish reading comprehension tutor with leveled texts (A1-C1), vocabulary extraction, comprehension questions, and progress tracking. Addresses morphological decoding, case-tracking, and aspect recognition. tutor.js is COMPLETE."
+  },
+  {
+    "name": "polish-study-planner",
+    "description": "Polish fluency study planner and progress coach. Adaptive placement test, personalized weekly plans, FSRS-based spaced repetition across 7 skill areas. Includes Certyfikat Znajomości Języka Polskiego exam prep. tutor.js is COMPLETE."
+  },
+  {
+    "name": "polish-vocabulary",
+    "description": "Polish vocabulary builder with spaced repetition. Implementation in tutor.js is COMPLETE. Teaches words by CEFR level with collocations, false friends, and contextual exercises. Covers Polish-specific features: case government, aspect pairs, diminutives, and Pan/Pani register vocabulary."
+  },
+  {
+    "name": "polish-writing",
+    "description": "Polish writing workshop: CEFR-leveled prompts (A1-C2), rubric-based assessment, error tracking across 8 correction categories, spaced review of weak areas. Process-genre hybrid approach. tutor.js is COMPLETE."
+  },
+  {
+    "name": "portuguese-conversation",
+    "description": "Portuguese conversation practice partner with register calibration (tu/você/o senhor), role-play scenarios by CEFR level, regional variants, and adaptive error correction. tutor.js is COMPLETE — all data, profiles, and session logic are embedded."
+  },
+  {
+    "name": "portuguese-grammar",
+    "description": "Portuguese grammar workshop with Socratic discovery-based teaching, Processing Instruction, Concept-Based Instruction (SCOBAs), and FSRS spaced repetition. tutor.js is COMPLETE — all grammar data, exercises, SCOBAs, profiles, and CLI are embedded. Covers ser/estar/ficar, personal infinitive, future subjunctive, clitic placement, and more across CEFR A1-C2."
+  },
+  {
+    "name": "portuguese-listening",
+    "description": "Portuguese listening comprehension lab. Trains auditory processing via dictation, minimal pairs, gap-fill, comprehension, and note-taking exercises across CEFR A1-C2. Covers connected speech, regional accents, and reductions. JS implementation is complete."
+  },
+  {
+    "name": "portuguese-pronunciation",
+    "description": "Portuguese pronunciation coach: 7-vowel system, nasal vowels/diphthongs, LH/NH, stress patterns, connected speech, intonation, BR vs EP variation. FSRS-tracked self-grading (0-3). Intelligibility-first approach across all Portuguese varieties."
+  },
+  {
+    "name": "portuguese-reading",
+    "description": "Portuguese reading comprehension tutor with leveled texts (A1-C1), vocabulary extraction, comprehension questions, and progress tracking. JS implementation is complete."
+  },
+  {
+    "name": "portuguese-study-planner",
+    "description": "Portuguese fluency study planner and progress coach. Adaptive placement test, personalized weekly plans, FSRS-based spaced repetition across 7 skill areas. Includes CELPE-Bras and CAPLE exam prep. Trigger: \"plan my week\", \"what should I study\", \"my progress\", \"take placement test\"."
+  },
+  {
+    "name": "portuguese-vocabulary",
+    "description": "Portuguese vocabulary builder with spaced repetition. Implementation in tutor.js is COMPLETE. Teaches words by CEFR level with gender, collocations, false friends, and contextual exercises. Use when the learner wants to \"learn new words\", \"practice vocabulary\", \"study collocations\", or build Portuguese word knowledge."
+  },
+  {
+    "name": "portuguese-writing",
+    "description": "Portuguese writing workshop: CEFR-leveled prompts (A1-C2), rubric-based assessment, error tracking across 10 correction categories, spaced review of weak areas. Process-genre hybrid approach."
+  },
+  {
+    "name": "romanian-conversation",
+    "description": "Romanian conversation practice partner with register calibration (tu/dumneavoastră), role-play scenarios by CEFR level, and adaptive error correction. tutor.js is COMPLETE — all data, profiles, and session logic are embedded."
+  },
+  {
+    "name": "romanian-grammar",
+    "description": "Romanian grammar workshop with Socratic discovery-based teaching, Processing Instruction, Concept-Based Instruction (SCOBAs), and FSRS spaced repetition. tutor.js is COMPLETE — all grammar data, exercises, SCOBAs, profiles, and CLI are embedded. Covers definite article suffixes, 5 cases, subjunctive with sa, conditional, presumptive mood, and more across CEFR A1-C2."
+  },
+  {
+    "name": "romanian-listening",
+    "description": "Romanian listening comprehension lab. Trains auditory processing via dictation, minimal pairs, gap-fill, comprehension, and note-taking exercises across CEFR A1-C2. Covers connected speech, palatalization, diphthongs, and dialectal variation. JS implementation is complete."
+  },
+  {
+    "name": "romanian-pronunciation",
+    "description": "Romanian pronunciation coach: 7-vowel system (including a /schwa/ and a/i /barred-i/), diphthongs, palatalization, trilled R, stress patterns, connected speech, intonation, dialectal awareness. FSRS-tracked self-grading (0-3). Intelligibility-first approach."
+  },
+  {
+    "name": "romanian-reading",
+    "description": "Romanian reading comprehension tutor with leveled texts (A1-C1), vocabulary extraction, comprehension questions, and progress tracking. Leverages cognate recognition for Romance/English speakers. Teaches case endings and suffixed articles as reading clues. JS implementation is complete."
+  },
+  {
+    "name": "romanian-study-planner",
+    "description": "Romanian fluency study planner and progress coach. Adaptive placement test, personalized weekly plans, FSRS-based spaced repetition across 7 skill areas. Includes Romanian exam prep (Certificate of Linguistic Competence, ICR, ECL). Trigger: \"plan my week\", \"what should I study\", \"my progress\", \"take placement test\"."
+  },
+  {
+    "name": "romanian-vocabulary",
+    "description": "Romanian vocabulary builder with spaced repetition. Implementation in tutor.js is COMPLETE. Teaches words by CEFR level with 3-gender system (m./f./n.), suffixed definite article, collocations, false friends, cognate patterns, and contextual exercises. Uses FSRS grades 1-4. Use when the learner wants to \"learn new words\", \"practice vocabulary\", \"study collocations\", or build Romanian word knowledge."
+  },
+  {
+    "name": "romanian-writing",
+    "description": "Romanian writing workshop: CEFR-leveled prompts (A1-C2), rubric-based assessment, error tracking across 10 correction categories (including diacritics, case, and suffixed article), spaced review of weak areas. Process-genre hybrid approach."
+  },
+  {
+    "name": "russian-conversation",
+    "description": "Russian conversation practice partner with register calibration (ты/вы), role-play scenarios by CEFR level, and adaptive error correction. tutor.js is COMPLETE — all data, profiles, and session logic are embedded."
+  },
+  {
+    "name": "russian-grammar",
+    "description": "Russian grammar workshop with Socratic discovery-based teaching, Processing Instruction, Concept-Based Instruction (SCOBAs), and FSRS spaced repetition. tutor.js is COMPLETE — all grammar data, exercises, SCOBAs, profiles, and CLI are embedded. Covers 6 cases, verbal aspect, verbs of motion, participles, and more across CEFR A1-C2."
+  },
+  {
+    "name": "russian-listening",
+    "description": "Russian listening comprehension lab. Trains auditory processing via dictation, minimal pairs, gap-fill, comprehension, and note-taking exercises across CEFR A1-C2. Covers connected speech, vowel reduction, palatalization, and colloquial reductions. JS implementation is complete."
+  },
+  {
+    "name": "russian-pronunciation",
+    "description": "Russian pronunciation coach: hard/soft consonant pairs, vowel reduction (аканье/иканье), ы sound, word stress, IK intonation patterns, connected speech. FSRS-tracked self-grading (0-3). Intelligibility-first approach."
+  },
+  {
+    "name": "russian-reading",
+    "description": "Russian reading comprehension tutor with leveled texts (A1-C2), vocabulary extraction, comprehension questions, and progress tracking. Special focus on Cyrillic decoding, case-ending parsing, and word-order as information structure. JS implementation is complete."
+  },
+  {
+    "name": "russian-study-planner",
+    "description": "Russian fluency study planner and progress coach. Adaptive placement test, personalized weekly plans, FSRS-based spaced repetition across 7 skill areas. Includes TORFL exam prep and Cyrillic literacy check. Trigger: \"plan my week\", \"what should I study\", \"my progress\", \"take placement test\"."
+  },
+  {
+    "name": "russian-vocabulary",
+    "description": "Russian vocabulary builder with spaced repetition. Implementation in tutor.js is COMPLETE. Teaches words by CEFR level with gender, aspect pairs, collocations, false friends, and contextual exercises. Use when the learner wants to \"learn new words\", \"practice vocabulary\", \"study verbs\", or build Russian word knowledge."
+  },
+  {
+    "name": "russian-writing",
+    "description": "Russian writing workshop: CEFR-leveled prompts (A1-C2), rubric-based assessment, error tracking across 8 correction categories, spaced review of weak areas. Process-genre hybrid approach."
+  },
+  {
+    "name": "science-earth-space",
+    "description": "Interactive earth & space science tutor (K-8). earth-space.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate earth-space.js. Use for: weather, rocks, space, Moon, volcanoes, earthquakes, oceans, climate, solar system, fossils."
+  },
+  {
+    "name": "science-engineering",
+    "description": "Interactive engineering design tutor (K-8). engineering.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate engineering.js. Use for: engineering design, building prototypes, solving problems, testing solutions, iterative design."
+  },
+  {
+    "name": "science-inquiry",
+    "description": "Interactive scientific inquiry tutor (K-8). inquiry.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate inquiry.js. Use for: experiments, scientific method, investigations, data collection, fair tests, variables, graphing."
+  },
+  {
+    "name": "science-life",
+    "description": "Interactive life science tutor (K-8). life-science.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate life-science.js. Use for: living things, animals, plants, ecosystems, food chains, habitats, human body, heredity, evolution."
+  },
+  {
+    "name": "science-literacy",
+    "description": "Interactive science literacy tutor (K-8). literacy.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate literacy.js. Use for: science vocabulary, reading science texts, interpreting charts, scientific writing, evaluating sources."
+  },
+  {
+    "name": "science-physical",
+    "description": "Interactive physical science tutor (K-8). physical-science.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate physical-science.js. Use for: matter, forces, magnets, electricity, energy, light, sound, waves, chemistry, physics."
+  },
+  {
+    "name": "science-reasoning",
+    "description": "Interactive scientific reasoning tutor (K-8). reasoning.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate reasoning.js. Use for: CER writing, evidence evaluation, crosscutting concepts, scientific models, argumentation."
+  },
+  {
+    "name": "science-study-planner",
+    "description": "Interactive science study planner (K-8). study-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate study-planner.js. Use for: planning science study, progress tracking, assessments, weekly plans, goal setting."
+  },
+  {
+    "name": "socialstudies-civics",
+    "description": "Interactive civics & government tutor (K-8). civics.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate civics.js. Use for: government, citizenship, rights, laws, voting, Constitution, civic participation."
+  },
+  {
+    "name": "socialstudies-culture",
+    "description": "Interactive culture & society tutor (K-8). culture.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate culture.js. Use for: cultural awareness, diversity, identity, world cultures, traditions, customs, empathy."
+  },
+  {
+    "name": "socialstudies-current-events",
+    "description": "Interactive current events & media literacy tutor (K-8). current-events.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate current-events.js. Use for: news literacy, media analysis, fact/opinion, bias detection, current events discussion."
+  },
+  {
+    "name": "socialstudies-economics",
+    "description": "Interactive economics tutor (K-8). economics.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate economics.js. Use for: wants/needs, scarcity, opportunity cost, supply/demand, trade, money, financial literacy."
+  },
+  {
+    "name": "socialstudies-geography",
+    "description": "Interactive geography tutor (K-8). geography.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate geography.js. Use for: maps, continents, oceans, landforms, climate, regions, latitude/longitude."
+  },
+  {
+    "name": "socialstudies-history",
+    "description": "Interactive history tutor (K-8). history.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate history.js. Use for: US history, world history, timelines, cause/effect, perspectives, primary sources."
+  },
+  {
+    "name": "socialstudies-inquiry",
+    "description": "Interactive social studies inquiry tutor (K-8). inquiry.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate inquiry.js. Use for: compelling questions, source analysis, evidence evaluation, arguments, research, C3 Inquiry Arc."
+  },
+  {
+    "name": "socialstudies-study-planner",
+    "description": "Interactive social studies study planner & coordinator (K-8). study-planner.js is COMPLETE — run it directly. Do NOT create, rewrite, or regenerate study-planner.js. Use for: study plans, progress tracking, assessments, scheduling, coordinating all 7 SS domains."
+  },
+  {
+    "name": "spanish-conversation",
+    "description": "Spanish conversation practice partner with register calibration (tu/usted/vos), role-play scenarios by CEFR level, regional variants, and adaptive error correction. tutor.js is COMPLETE — all data, profiles, and session logic are embedded."
+  },
+  {
+    "name": "spanish-grammar",
+    "description": "Spanish grammar workshop with Socratic discovery-based teaching, Processing Instruction, Concept-Based Instruction (SCOBAs), and FSRS spaced repetition. tutor.js is COMPLETE — all grammar data, exercises, SCOBAs, profiles, and CLI are embedded. Covers ser/estar, preterite/imperfect, subjunctive, por/para, conditionals, and more across CEFR A1-C2."
+  },
+  {
+    "name": "spanish-listening",
+    "description": "Spanish listening comprehension lab. Trains auditory processing via dictation, minimal pairs, gap-fill, comprehension, and note-taking exercises across CEFR A1-C2. Covers connected speech, regional accents, and reductions. JS implementation is complete."
+  },
+  {
+    "name": "spanish-pronunciation",
+    "description": "Spanish pronunciation coach: 5-vowel system, tap/trill r, stress patterns, connected speech, intonation, regional variation. FSRS-tracked self-grading (0-3). Intelligibility-first approach across all Spanish varieties."
+  },
+  {
+    "name": "spanish-reading",
+    "description": "Spanish reading comprehension tutor with leveled texts (A1-C1), vocabulary extraction, comprehension questions, and progress tracking. JS implementation is complete."
+  },
+  {
+    "name": "spanish-study-planner",
+    "description": "Spanish fluency study planner and progress coach. Adaptive placement test, personalized weekly plans, FSRS-based spaced repetition across 7 skill areas. Includes DELE/SIELE exam prep. Trigger: \"plan my week\", \"what should I study\", \"my progress\", \"take placement test\"."
+  },
+  {
+    "name": "spanish-vocabulary",
+    "description": "Spanish vocabulary builder with spaced repetition. Implementation in tutor.js is COMPLETE. Teaches words by CEFR level with gender, collocations, false friends, and contextual exercises. Use when the learner wants to \"learn new words\", \"practice vocabulary\", \"study collocations\", or build Spanish word knowledge."
+  },
+  {
+    "name": "spanish-writing",
+    "description": "Spanish writing workshop: CEFR-leveled prompts (A1-C2), rubric-based assessment, error tracking across 8 correction categories, spaced review of weak areas. Process-genre hybrid approach."
+  },
+  {
+    "name": "startupnews",
+    "description": "Fetches startup/tech news from TechMeme, TechCrunch, HN, VentureBeat, Crunchbase. No LLM calls, no API keys, no deps."
+  },
+  {
+    "name": "ukrainian-conversation",
+    "description": "Ukrainian conversation practice partner with ти/Ви register calibration, role-play scenarios by CEFR level, vocative case in natural speech, and adaptive error correction. Avoids Surzhyk. tutor.js is COMPLETE."
+  },
+  {
+    "name": "ukrainian-grammar",
+    "description": "Ukrainian grammar workshop with Socratic discovery-based teaching, Processing Instruction, SCOBA diagrams, and FSRS spaced repetition. Covers 7-case system (including vocative!), verbal aspect, synthetic future, pluperfect, verbs of motion. tutor.js is COMPLETE."
+  },
+  {
+    "name": "ukrainian-listening",
+    "description": "Ukrainian listening comprehension lab. Trains auditory processing via dictation, minimal pairs, gap-fill, comprehension, and note-taking exercises across CEFR A1-C2. Covers connected speech, no-vowel-reduction, г/ґ discrimination, vocative recognition, and surzhyk identification. tutor.js is COMPLETE."
+  },
+  {
+    "name": "ukrainian-pronunciation",
+    "description": "Ukrainian pronunciation lab with prosody-first approach, FSRS spaced repetition, and L1-specific drills. Covers no-vowel-reduction, г [ɦ] vs ґ [ɡ], и [ɪ] vs і [i], в [ʋ/w], щ [ʃtʃ], palatalization, stress, and intonation. tutor.js is COMPLETE."
+  },
+  {
+    "name": "ukrainian-reading",
+    "description": "Ukrainian reading comprehension tutor with leveled texts (A1-C1), vocabulary extraction, comprehension questions, and progress tracking. Covers Cyrillic decoding, vocative recognition in dialogue, apostrophe awareness, and Ukrainian-Russian false cognates. tutor.js is COMPLETE."
+  },
+  {
+    "name": "ukrainian-study-planner",
+    "description": "Ukrainian fluency study planner and progress coach. Adaptive placement test, personalized weekly plans, FSRS-based spaced repetition across 7 skill areas. Supports English/Russian/Polish/heritage learner pathways. tutor.js is COMPLETE."
+  },
+  {
+    "name": "ukrainian-vocabulary",
+    "description": "Ukrainian vocabulary builder with spaced repetition. Teaches words by CEFR level with gender, stress, collocations, aspect pairs, Ukrainian-Russian false friends, and contextual exercises. tutor.js is COMPLETE."
+  },
+  {
+    "name": "ukrainian-writing",
+    "description": "Ukrainian writing workshop: CEFR-leveled prompts (A1-C2), rubric-based assessment, error tracking across 8 correction categories, spaced review of weak areas. Process-genre hybrid approach. tutor.js is COMPLETE."
+  },
+  {
+    "name": "usnews",
+    "description": "Fetches top US news from NYT, Fox News, NPR via RSS. No LLM calls, no API keys, no deps."
+  },
+  {
+    "name": "weather",
+    "description": "Current weather, forecasts, and alerts for any city. Uses Open-Meteo (free, no API key). No deps."
+  },
+  {
+    "name": "worldnews",
+    "description": "Fetches top world news from Guardian, BBC, Al Jazeera, NYT, Fox via RSS/JSON. No LLM calls, no API keys, no deps."
+  }
+]
