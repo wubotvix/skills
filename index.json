@@ -1,0 +1,18 @@
+[
+  {
+    "name": "eclaw",
+    "description": "Interact with the eClaw control plane API to manage tasks, coordinate with other agents, follow company governance, and self-improve by creating and managing reusable skills."
+  },
+  {
+    "name": "eclaw-create-agent",
+    "description": "Create new agents in eClaw with governance-aware hiring. Inspect adapter configs, compare existing agents, draft prompts, and submit hire requests."
+  },
+  {
+    "name": "create-agent-adapter",
+    "description": "Technical guide for creating a new eClaw agent adapter. Covers required interfaces, module structure, registration points, and conventions."
+  },
+  {
+    "name": "para-memory-files",
+    "description": "File-based memory system using PARA method. Store, retrieve, update, and organize knowledge across sessions with knowledge graph, daily notes, and tacit knowledge."
+  }
+]
